@@ -1,0 +1,67 @@
+﻿@*<div id="@_id" class="card" tabindex="0" autofocus style="@Styles" @onblur="OnBlurAsync">
+    <div class="card-body">
+        <ul class="list-group">
+            @foreach (var option in _options)
+            {
+                <ContextMenuOption Model="option">
+                </ContextMenuOption>
+            }
+        </ul>
+    </div>
+</div>
+
+@code {
+    private Lazy<Task<IJSObjectReference>> _jsTask;
+
+    [Inject]
+    private IJSRuntime JsRuntime { get; set; }
+
+    protected double Top { get; private set; }
+
+    protected double Left { get; private set; }
+
+    private ICollection<ContextMenuOptionModel> _options;
+
+    private bool _isDisplay;
+
+    private string Styles => $"top: {Top}px; left: {Left}px; {(_isDisplay ? string.Empty : "display: none;")}";
+
+    private string _id { get; } = Guid.NewGuid().ToString("N");
+
+    public ContextMenu()
+    {
+        _options = new List<ContextMenuOptionModel>();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (firstRender)
+        {
+            _jsTask = new Lazy<Task<IJSObjectReference>>(() => JsRuntime.InvokeAsync<IJSObjectReference>(
+                "import", "./contextMenu.js").AsTask());
+        }
+        var js = await _jsTask.Value;
+        await js.InvokeVoidAsync("focus", _id);
+    }
+
+    public Task ShowAsync(List<ContextMenuOptionModel> options, double x, double y)
+    {
+        _options = options;
+        Left = x;
+        Top = y;
+        _isDisplay = true;
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+
+    private Task OnBlurAsync()
+    {
+        _options = new List<ContextMenuOptionModel>();
+        Top = 0;
+        Left = 0;
+        _isDisplay = false;
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+}*@

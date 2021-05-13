@@ -1,0 +1,39 @@
+﻿@*<canvas id="@Id" @ref="_canvasReference"></canvas>
+
+@code {
+
+    private Lazy<Task<IJSObjectReference>> _jsTask;
+
+    private ElementReference _canvasReference;
+
+    public string Id;
+
+    [Inject]
+    private IJSRuntime JsRuntime { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        _jsTask = new(() => JsRuntime.InvokeAsync<IJSObjectReference>(
+            "import", "./canvas/canvas.js").AsTask());
+        Id = Guid.NewGuid().ToString("N");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (firstRender)
+        {
+            var js = await _jsTask.Value;
+            await js.InvokeVoidAsync("init", Id);
+            StateHasChanged();
+        }
+    }
+
+    public async Task AddEntityAsync(EntityModel entityModel)
+    {
+        var js = await _jsTask.Value;
+        await js.InvokeVoidAsync("addEntity", entityModel);
+    }
+}
+*@

@@ -1,0 +1,48 @@
+﻿@page "/"
+@using System.Net
+
+<div class="container mt-5">
+    <div class="p-5">
+
+        <h1>Welcome! </h1>
+
+        <div class="mt-3">
+            <button class="btn btn-primary" @onclick="OnOpenSolutionClickedAsync">
+                <i class="fa fa-folder-open"></i> Open
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    private Lazy<Task<IJSObjectReference>> _jsTask;
+
+    [Inject]
+    private IJSRuntime JsRuntime { get; set; }
+
+    //[Inject]
+    //private ISolutionAppService SolutionAppService { get; set; }
+
+    [Inject]
+    protected NavigationManager NavigationManager { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        _jsTask = new Lazy<Task<IJSObjectReference>>(() => JsRuntime.InvokeAsync<IJSObjectReference>(
+            "import", "./index.js").AsTask());
+    }
+
+    private async Task OnOpenSolutionClickedAsync()
+    {
+        var js = await _jsTask.Value;
+        // TODO: Use native control to select .sln file.
+#if DEBUG
+    var solutionPath = @"C:\Users\Chi\source\repos\Acme.BookStore\aspnet-core\Acme.BookStore.sln";
+#else
+        var solutionPath = await js.InvokeAsync<string>("selectSolution");
+#endif
+        NavigationManager.NavigateTo($"designer/{WebUtility.UrlEncode(solutionPath)}");
+    }
+
+}

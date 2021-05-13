@@ -1,0 +1,11 @@
+﻿@*<li class="list-group-item px-3 py-2 @(Model.IsEnable ? string.Empty : "disabled")" @onclick="OnClicked">@Model.Name</li>
+
+@code {
+    [Parameter]
+    public ContextMenuOptionModel Model { get; set; }
+
+    private Task OnClicked()
+    {
+        return !Model.IsEnable ? Task.CompletedTask : Model.OnClickedCallBack.InvokeAsync();
+    }
+}*@

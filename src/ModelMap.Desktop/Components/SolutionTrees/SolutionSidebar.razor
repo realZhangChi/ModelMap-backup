@@ -1,0 +1,44 @@
+﻿@*@using MarauderMap.Solutions
+@using MarauderMap.Desktop.Blazor.Components.ContextMenus
+
+@if (Root is not null)
+{
+    <nav class="d-md-block bg-white sidebar" @onclick:stopPropagation @onmouseup="OnMouseUpAsync">
+        <div class="tree">
+            <Node NodeModel="Root" NestedLevel="0" OnClickCallback="OnNodeClickAsync"></Node>
+        </div>
+    </nav>
+}
+
+@code {
+
+    [Parameter]
+    public TreeNodeDto Root { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnMouseUpCallBack { get; set; }
+
+    public Node SelectedNodeReference { get; private set; }
+    
+    private Task OnNodeClickAsync(object arg)
+    {
+        if (arg is not Node clickNode)
+        {
+            return Task.CompletedTask;
+        }
+
+        // TODO: Better way(Decoupled) to set selected state
+        if (SelectedNodeReference is not null)
+        {
+            SelectedNodeReference.IsSelected = false;
+        }
+        SelectedNodeReference = clickNode;
+
+        return Task.CompletedTask;
+    }
+
+    private Task OnMouseUpAsync(MouseEventArgs e)
+    {
+        return OnMouseUpCallBack.InvokeAsync(e);
+    }
+}*@

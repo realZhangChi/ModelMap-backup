@@ -1,0 +1,85 @@
+﻿@*@using MarauderMap.Solutions
+
+@if (NodeModel is not null)
+{
+
+    <ul class="list-group">
+        <li class="list-group-item @(NodeModel.IsFile ? string.Empty : "collapse-toggle") @(IsSelected ? "selected": string.Empty)"
+        id="@Id"
+        @onmouseup="@OnClickedAsync">
+            @for (var i = 0; i < NestedLevel; i++)
+            {
+                <span class="indent"></span>
+            }
+            <span class="list-group-item-content">
+                @if (NodeModel.IsFile)
+                {
+                    <small><i class="fa mr-1 fa-fw"></i></small>
+                    <small><i class="fa mr-1 fa-fw fa-file"></i></small>
+                }
+                else
+                {
+                    <small><i class="indicator mr-1 fa fa-fw fa-chevron-right"></i></small>
+                    <small><i class="icon mr-1 fa fa-fw fa-folder"></i></small>
+                }
+                @NodeModel.Name
+            </span>
+        </li>
+
+        @if (!NodeModel.IsFile && NodeModel.Children is { Count: > 0 })
+        {
+            <li class="list-group-item collapse-container collapse">
+                @foreach (var node in NodeModel.Children)
+                {
+                    <Node NodeModel="@node" NestedLevel="@(NestedLevel+1)" OnClickCallback="@OnClickCallback"></Node>
+                }
+            </li>
+        }
+
+    </ul>
+}
+
+@code{
+    private Lazy<Task<IJSObjectReference>> _jsTask;
+
+    [Parameter]
+    public int NestedLevel { get; set; }
+
+    [Parameter]
+    public TreeNodeDto NodeModel { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickCallback { get; set; }
+
+    [Inject]
+    private IJSRuntime JsRuntime { get; set; }
+
+    public string Id { get; private set; }
+
+    public bool IsSelected { get; internal set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        Id = Guid.NewGuid().ToString("N");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        _jsTask = _jsTask = new Lazy<Task<IJSObjectReference>>(() => JsRuntime.InvokeAsync<IJSObjectReference>(
+            "import", "./solutionTree.js").AsTask());
+    }
+
+    private async Task OnClickedAsync(MouseEventArgs e)
+    {
+        var js = await _jsTask.Value;
+        IsSelected = true;
+        if (e.Button == 0 && !NodeModel.IsFile)
+        {
+            await js.InvokeVoidAsync("toggle", Id);
+        }
+
+        await OnClickCallback.InvokeAsync(this);
+    }
+}*@

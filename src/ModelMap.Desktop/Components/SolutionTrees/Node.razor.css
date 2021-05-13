@@ -1,0 +1,38 @@
+﻿.list-group {
+    border-radius: 0
+}
+
+.list-group-item {
+    border: 0;
+    padding: .2rem 1rem;
+    cursor: context-menu;
+    background: transparent;
+}
+
+    .list-group-item:not(.collapse-container):hover, .list-group-item.selected {
+        background: #007bff;
+        color: #f8f9fa;
+    }
+
+.list-group-item-content {
+    display: inline-flex;
+    align-items: baseline;
+}
+
+.collapse-container {
+    padding: 0;
+}
+
+.collapse-toggle:hover {
+    cursor: pointer;
+}
+
+span.indent {
+    margin-left: 1rem;
+}
+
+.indicator {
+}
+
+.icon {
+}
