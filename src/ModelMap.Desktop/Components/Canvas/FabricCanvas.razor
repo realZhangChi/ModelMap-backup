@@ -1,4 +1,4 @@
-﻿@*<canvas id="@Id" @ref="_canvasReference"></canvas>
+﻿<canvas id="@Id" @ref="_canvasReference"></canvas>
 
 @code {
 
@@ -30,10 +30,9 @@
         }
     }
 
-    public async Task AddEntityAsync(EntityModel entityModel)
+    public async Task AddEntityAsync(EntityComponentModel entityModel)
     {
         var js = await _jsTask.Value;
         await js.InvokeVoidAsync("addEntity", entityModel);
     }
 }
-*@

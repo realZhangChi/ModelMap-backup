@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using Volo.Abp.Guids;
 
-namespace MarauderMap.Desktop.Blazor.Components.SolutionTrees
+namespace MarauderMap.Desktop.Components.SolutionTrees
 {
     public partial class SolutionSidebar
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MarauderMap.Desktop.Blazor.Components.SolutionTrees
+namespace MarauderMap.Desktop.Components.SolutionTrees
 {
     public class NodeModel
     {

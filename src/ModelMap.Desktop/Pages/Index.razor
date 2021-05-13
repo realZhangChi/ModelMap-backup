@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using System.Net
+@using ModelMap.Desktop.Services.File
 
 <div class="container mt-5">
     <div class="p-5">
@@ -20,8 +21,8 @@
     [Inject]
     private IJSRuntime JsRuntime { get; set; }
 
-    //[Inject]
-    //private ISolutionAppService SolutionAppService { get; set; }
+    [Inject]
+    protected IFileService FileService { get; set; }
 
     [Inject]
     protected NavigationManager NavigationManager { get; set; }
@@ -35,13 +36,7 @@
 
     private async Task OnOpenSolutionClickedAsync()
     {
-        var js = await _jsTask.Value;
-        // TODO: Use native control to select .sln file.
-#if DEBUG
-    var solutionPath = @"C:\Users\Chi\source\repos\Acme.BookStore\aspnet-core\Acme.BookStore.sln";
-#else
-        var solutionPath = await js.InvokeAsync<string>("selectSolution");
-#endif
+        var solutionPath = await FileService.SelectFileAsync();
         NavigationManager.NavigateTo($"designer/{WebUtility.UrlEncode(solutionPath)}");
     }
 

@@ -1,5 +1,4 @@
-﻿@*@using MarauderMap.SourceEntries
-
+﻿
 <div class="mb-3">
     <label class="form-label">Properties</label>
     <button class="btn btn-sm btn-outline-primary m-3" @onclick="AddProperty"><i class="fa fa-plus"></i></button>
@@ -69,10 +68,10 @@
 
 @code{
     [CascadingParameter]
-    public EntityModel EntityModel { get; set; }
+    public EntityComponentModel EntityModel { get; set; }
 
     private void AddProperty()
     {
         EntityModel.Properties.Add(new PropertyModel());
     }
-}*@
+}

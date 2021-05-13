@@ -1,4 +1,6 @@
-﻿@*<div id="@_id" class="card" tabindex="0" autofocus style="@Styles" @onblur="OnBlurAsync">
+﻿@using ModelMap.Desktop.Models.ContextMenus
+
+<div id="@_id" class="card" tabindex="0" autofocus style="@Styles" @onblur="OnBlurAsync">
     <div class="card-body">
         <ul class="list-group">
             @foreach (var option in _options)
@@ -64,4 +66,4 @@
         StateHasChanged();
         return Task.CompletedTask;
     }
-}*@
+}

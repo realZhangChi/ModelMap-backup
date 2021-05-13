@@ -1,7 +1,10 @@
-﻿@*@page "/designer/{SolutionPath}"
-@using MarauderMap.Solutions
-@using MarauderMap.Desktop.Blazor.Components.SolutionTrees
-@using MarauderMap.Desktop.Blazor.Components.Modals
+﻿@page "/designer/{SolutionPath}"
+@using ModelMap.Solutions
+@using ModelMap.Desktop.Components.SolutionTrees
+@using ModelMap.Desktop.Components.Canvas
+@using ModelMap.Desktop.Components.ContextMenus
+@using ModelMap.Desktop.Models.ContextMenus
+@using ModelMap.Desktop.Services.Solution
 
 <div>
     <SolutionSidebar @ref="_solutionSidebar" Root="Solution?.RootNode" OnMouseUpCallBack="ShowContextMenuAsync"></SolutionSidebar>
@@ -33,28 +36,29 @@
 
     private Modal _entityModal;
 
-    private EntityModel _entityModel;
+    private EntityComponentModel _entityModel;
 
     private FabricCanvas _fabricCanvas;
 
     [Parameter]
     public string SolutionPath { get; set; }
 
+    [Inject]
+    public ISolutionService SolutionService { get; set; }
+
     protected SolutionDto Solution { get; set; }
 
-    [Inject]
-    private ISolutionAppService SolutionAppService { get; set; }
 
     public Designer()
     {
-        _entityModel = new EntityModel();
+        _entityModel = new EntityComponentModel();
     }
 
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
 
-        Solution = await SolutionAppService.SetPathAsync(SolutionPath);
+        Solution = await SolutionService.GetSolutionModelAsync(SolutionPath);
     }
 
     private Task ShowContextMenuAsync(MouseEventArgs e)
@@ -90,4 +94,4 @@
 
     }
 
-}*@
+}

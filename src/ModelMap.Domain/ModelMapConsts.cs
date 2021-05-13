@@ -2,7 +2,7 @@
 {
     public static class ModelMapConsts
     {
-        public const string DbTablePrefix = "App";
+        public const string DbTablePrefix = "";
 
         public const string DbSchema = null;
     }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ModelMap.Diagrams;
 using ModelMap.Users;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
@@ -26,6 +27,8 @@ namespace ModelMap.EntityFrameworkCore
          * Also map them inside ModelMapDbContextModelCreatingExtensions.ConfigureModelMap
          */
 
+        public DbSet<EntityComponent> EntityComponents { get; set; }
+
         public ModelMapDbContext(DbContextOptions<ModelMapDbContext> options)
             : base(options)
         {
@@ -41,7 +44,7 @@ namespace ModelMap.EntityFrameworkCore
             builder.Entity<AppUser>(b =>
             {
                 b.ToTable(AbpIdentityDbProperties.DbTablePrefix + "Users"); //Sharing the same table "AbpUsers" with the IdentityUser
-                
+
                 b.ConfigureByConvention();
                 b.ConfigureAbpUser();
 

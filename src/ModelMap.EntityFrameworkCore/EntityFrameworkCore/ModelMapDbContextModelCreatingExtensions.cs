@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ModelMap.EntityFrameworkCore.EntityConfigurations.Diagrams;
 using Volo.Abp;
 
 namespace ModelMap.EntityFrameworkCore
@@ -17,6 +18,7 @@ namespace ModelMap.EntityFrameworkCore
             //    b.ConfigureByConvention(); //auto configure for the base class props
             //    //...
             //});
+            builder.ConfigureDiagramAggregate();
         }
     }
 }

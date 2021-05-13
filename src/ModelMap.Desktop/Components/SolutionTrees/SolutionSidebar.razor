@@ -1,5 +1,4 @@
-﻿@*@using MarauderMap.Solutions
-@using MarauderMap.Desktop.Blazor.Components.ContextMenus
+﻿@using ModelMap.Solutions
 
 @if (Root is not null)
 {
@@ -19,7 +18,7 @@
     public EventCallback<MouseEventArgs> OnMouseUpCallBack { get; set; }
 
     public Node SelectedNodeReference { get; private set; }
-    
+
     private Task OnNodeClickAsync(object arg)
     {
         if (arg is not Node clickNode)
@@ -41,4 +40,4 @@
     {
         return OnMouseUpCallBack.InvokeAsync(e);
     }
-}*@
+}
