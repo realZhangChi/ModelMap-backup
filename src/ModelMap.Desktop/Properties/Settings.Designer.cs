@@ -34,5 +34,41 @@ namespace ModelMap.Desktop.Properties {
                 this["AccessToken"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string IdentityToken {
+            get {
+                return ((string)(this["IdentityToken"]));
+            }
+            set {
+                this["IdentityToken"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RefreshToken {
+            get {
+                return ((string)(this["RefreshToken"]));
+            }
+            set {
+                this["RefreshToken"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public long AccessTokenExpiration {
+            get {
+                return ((long)(this["AccessTokenExpiration"]));
+            }
+            set {
+                this["AccessTokenExpiration"] = value;
+            }
+        }
     }
 }

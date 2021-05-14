@@ -1,4 +1,6 @@
 ﻿using IdentityModel.OidcClient;
+using Microsoft.Extensions.DependencyInjection;
+using ModelMap.Desktop.Services.Identity;
 using System;
 using System.Windows;
 
@@ -9,8 +11,11 @@ namespace ModelMap.Desktop
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly IServiceProvider _serviceProvider;
+
         public MainWindow(IServiceProvider serviceProvider)
         {
+            _serviceProvider = serviceProvider;
             Resources.Add("services", serviceProvider);
             InitializeComponent();
         }
@@ -21,38 +26,9 @@ namespace ModelMap.Desktop
             {
                 return;
             }
-            var options = new OidcClientOptions()
-            {
-                // TODO: use configuration
-                Authority = "https://localhost:44331",
-                ClientId = "ModelMap_Desktop",
-                Scope = "openid profile email offline_access ModelMap",
-                RedirectUri = "http://127.0.0.1/authentication/login-callback",
-                Browser = new WpfEmbeddedBrowser(),
-                Policy = new Policy
-                {
-                    RequireIdentityTokenSignature = false
-                }
-            };
 
-            var _oidcClient = new OidcClient(options);
-
-            LoginResult loginResult;
-            try
-            {
-                loginResult = await _oidcClient.LoginAsync();
-            }
-            catch (Exception exception)
-            {
-                return;
-            }
-
-            if (!loginResult.IsError)
-            {
-                // TODO: migrate to maui
-                Properties.Settings.Default.AccessToken = loginResult.AccessToken;
-                Properties.Settings.Default.Save();
-            }
+            var identityServer = _serviceProvider.GetRequiredService<IIdentityService>();
+            await identityServer.LoginAsync();
         }
     }
 }

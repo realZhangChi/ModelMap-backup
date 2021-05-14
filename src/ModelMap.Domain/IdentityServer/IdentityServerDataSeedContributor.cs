@@ -227,8 +227,8 @@ namespace ModelMap.IdentityServer
                         Description = name,
                         AlwaysIncludeUserClaimsInIdToken = true,
                         AllowOfflineAccess = true,
-                        AbsoluteRefreshTokenLifetime = 31536000, //365 days
-                        AccessTokenLifetime = 31536000, //365 days
+                        AbsoluteRefreshTokenLifetime = 172800, //365 days
+                        AccessTokenLifetime = 7200, //365 days
                         AuthorizationCodeLifetime = 300,
                         IdentityTokenLifetime = 300,
                         RequireConsent = false,

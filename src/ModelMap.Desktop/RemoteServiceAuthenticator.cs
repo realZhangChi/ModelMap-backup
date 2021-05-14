@@ -1,4 +1,7 @@
 ﻿using IdentityModel.Client;
+using ModelMap.Desktop.Services.Identity;
+using ModelMap.Desktop.Services.Setting;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client;
@@ -12,10 +15,17 @@ namespace ModelMap.Desktop
     [ExposeServices(typeof(IRemoteServiceHttpClientAuthenticator))]
     public class RemoteServiceAuthenticator : IdentityModelRemoteServiceHttpClientAuthenticator, ITransientDependency
     {
+        private readonly ISettingService _settingService;
+        private readonly IIdentityService _identityService;
+
         public RemoteServiceAuthenticator(
-            IIdentityModelAuthenticationService identityModelAuthenticationService)
+            IIdentityModelAuthenticationService identityModelAuthenticationService,
+            ISettingService settingService,
+            IIdentityService identityService)
             : base(identityModelAuthenticationService)
         {
+            _settingService = settingService;
+            _identityService = identityService;
         }
 
 
@@ -23,7 +33,14 @@ namespace ModelMap.Desktop
         {
             if (context.RemoteService.GetUseCurrentAccessToken() != false)
             {
-                var accessToken = Properties.Settings.Default.AccessToken;
+                var expireAt = _settingService.AccessTokenExpirationUnixTimeSeconds;
+                var timespan = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                if (expireAt > 0 && expireAt - DateTimeOffset.UtcNow.ToUnixTimeSeconds() < 600)
+                {
+                    await _identityService.RefreshTokenAsync();
+                }
+
+                var accessToken = _settingService.AccessToken;
                 if (accessToken != null)
                 {
                     context.Request.SetBearerToken(accessToken);
