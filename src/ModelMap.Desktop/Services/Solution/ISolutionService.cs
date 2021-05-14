@@ -11,6 +11,6 @@ namespace ModelMap.Desktop.Services.Solution
     public interface ISolutionService
     {
         // TODO: Create SolutionModel
-        Task<SolutionDto> GetSolutionModelAsync([NotNull] string path);
+        Task<SolutionTreeDto> GetSolutionModelAsync([NotNull] string path);
     }
 }

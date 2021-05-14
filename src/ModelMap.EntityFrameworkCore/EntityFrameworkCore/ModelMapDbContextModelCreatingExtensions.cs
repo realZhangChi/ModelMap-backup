@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModelMap.EntityFrameworkCore.EntityConfigurations.Diagrams;
+using ModelMap.EntityFrameworkCore.EntityConfigurations.Solutions;
 using Volo.Abp;
 
 namespace ModelMap.EntityFrameworkCore
@@ -19,6 +20,7 @@ namespace ModelMap.EntityFrameworkCore
             //    //...
             //});
             builder.ConfigureDiagramAggregate();
+            builder.ConfigureSolutionAggregate();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using System.Net
 @using ModelMap.Desktop.Services.File
+@using ModelMap.Solutions
 
 <div class="container mt-5">
     <div class="p-5">
@@ -27,6 +28,9 @@
     [Inject]
     protected NavigationManager NavigationManager { get; set; }
 
+    [Inject]
+    protected ISolutionAppService SolutionAppService { get; set; }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
@@ -37,6 +41,10 @@
     private async Task OnOpenSolutionClickedAsync()
     {
         var solutionPath = await FileService.SelectFileAsync();
+        await SolutionAppService.CreateAsync(new CreateSolutionDto()
+        {
+            AbsolutePath = solutionPath
+        });
         NavigationManager.NavigateTo($"designer/{WebUtility.UrlEncode(solutionPath)}");
     }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModelMap.Diagrams;
+using ModelMap.Solutions;
 using ModelMap.Users;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
@@ -27,7 +28,16 @@ namespace ModelMap.EntityFrameworkCore
          * Also map them inside ModelMapDbContextModelCreatingExtensions.ConfigureModelMap
          */
 
+        # region Diagrams
+
         public DbSet<EntityComponent> EntityComponents { get; set; }
+
+        # endregion
+
+        #region Solutions
+
+        public DbSet<Solution> Solutions { get; set; }
+        #endregion
 
         public ModelMapDbContext(DbContextOptions<ModelMapDbContext> options)
             : base(options)

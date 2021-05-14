@@ -1,7 +1,14 @@
-﻿namespace ModelMap.Solutions
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Volo.Abp.Application.Dtos;
+
+namespace ModelMap.Solutions
 {
-    public class SolutionDto
+    public class SolutionDto : FullAuditedEntityDto<Guid>
     {
-        public TreeNodeDto RootNode { get; set; }
+        public string AbsolutePath { get; set; }
+
+        public string Name { get; set; }
     }
 }

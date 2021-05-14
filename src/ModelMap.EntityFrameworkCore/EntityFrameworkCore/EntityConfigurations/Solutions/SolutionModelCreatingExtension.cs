@@ -10,7 +10,7 @@ namespace ModelMap.EntityFrameworkCore.EntityConfigurations.Solutions
             Check.NotNull(builder, nameof(builder));
 
             builder.ApplyConfiguration(new SolutionEntityTypeConfigurations());
-            builder.ApplyConfiguration(new ProjectEntityTypeConfiguration());
+            //builder.ApplyConfiguration(new ProjectEntityTypeConfiguration());
         }
     }
 }

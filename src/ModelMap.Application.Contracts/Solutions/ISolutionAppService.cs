@@ -6,6 +6,6 @@ namespace ModelMap.Solutions
 {
     public interface ISolutionAppService : IApplicationService
     {
-        Task<SolutionDto> SetPathAsync([NotNull] string fullPath);
+        Task<SolutionDto> CreateAsync([NotNull] CreateSolutionDto input);
     }
 }

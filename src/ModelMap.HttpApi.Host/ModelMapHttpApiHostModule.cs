@@ -26,6 +26,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.VirtualFileSystem;
+using Microsoft.IdentityModel.Logging;
 
 namespace ModelMap
 {
@@ -97,6 +98,7 @@ namespace ModelMap
 
         private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
         {
+            IdentityModelEventSource.ShowPII = true;
             context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {

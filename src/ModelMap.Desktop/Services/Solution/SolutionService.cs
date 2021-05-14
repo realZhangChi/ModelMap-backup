@@ -18,7 +18,7 @@ namespace ModelMap.Desktop.Services.Solution
             "Properties"
         };
 
-        public Task<SolutionDto> GetSolutionModelAsync([NotNull] string path)
+        public Task<SolutionTreeDto> GetSolutionModelAsync([NotNull] string path)
         {
             var directory = Path.GetDirectoryName(path);
             var root = new TreeNodeDto()
@@ -29,7 +29,7 @@ namespace ModelMap.Desktop.Services.Solution
                 Children = new List<TreeNodeDto>()
             };
             SetChildren(root);
-            var solution = new SolutionDto()
+            var solution = new SolutionTreeDto()
             {
                 RootNode = root
             };

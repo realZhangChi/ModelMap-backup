@@ -8,12 +8,14 @@
 
 
 	<ItemGroup>
+		<PackageReference Include="IdentityModel.OidcClient" Version="4.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Wpf" Version="6.0.0-preview.3.21201.13" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0-preview.3.21201.4" />
 		<PackageReference Include="Volo.Abp.Autofac" Version="4.3.0" />
 		<PackageReference Include="Serilog.Extensions.Hosting" Version="4.1.2" />
 		<PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
 		<PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+		<PackageReference Include="Volo.Abp.Http.Client.IdentityModel" Version="4.3.0" />
 	</ItemGroup>
 
 
@@ -29,6 +31,28 @@
 		<Content Update="wwwroot\**\*.*">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <Folder Include="ViewModel\" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <Compile Update="Properties\Settings.Designer.cs">
+	    <DesignTimeSharedInput>True</DesignTimeSharedInput>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Settings.settings</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <None Update="Properties\Settings.settings">
+	    <Generator>SettingsSingleFileGenerator</Generator>
+	    <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+	  </None>
 	</ItemGroup>
 
 </Project>

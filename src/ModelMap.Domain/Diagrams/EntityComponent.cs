@@ -12,6 +12,8 @@ namespace ModelMap.Diagrams
 {
     public class EntityComponent : ComponentBase
     {
+        public Guid SolutionId { get; private set; }
+
         [MaxLength(DiagramConsts.ArrayStringMaxLength)]
         public string _imports;
         [Required]
@@ -23,7 +25,7 @@ namespace ModelMap.Diagrams
 
         [Required]
         [MaxLength(DiagramConsts.PathMaxLength)]
-        public virtual string ProjectFullPath { get; set; }
+        public virtual string ProjectRelativePath { get; set; }
 
         [Required]
         [MaxLength(DiagramConsts.PathMaxLength)]
@@ -52,9 +54,10 @@ namespace ModelMap.Diagrams
 
         protected EntityComponent(
             Guid id,
+            Guid solutionId,
             [NotNull] ICollection<string> imports,
             [NotNull] string namespaceBeloningTo,
-            [NotNull] string projectFullPath,
+            [NotNull] string projectRelativePath,
             [NotNull] string directory,
             [NotNull] string name,
             [NotNull] string baseClass,
@@ -64,18 +67,20 @@ namespace ModelMap.Diagrams
         {
             _ = Check.NotNull(imports, nameof(imports));
             _ = Check.NotNullOrWhiteSpace(namespaceBeloningTo, nameof(namespaceBeloningTo), DiagramConsts.NamespaceMaxLength);
-            _ = Check.NotNullOrWhiteSpace(projectFullPath, nameof(projectFullPath), DiagramConsts.PathMaxLength);
+            _ = Check.NotNullOrWhiteSpace(projectRelativePath, nameof(projectRelativePath), DiagramConsts.PathMaxLength);
             _ = Check.NotNullOrWhiteSpace(directory, nameof(directory), DiagramConsts.PathMaxLength);
             _ = Check.NotNullOrWhiteSpace(name, nameof(name), DiagramConsts.ClassNameMaxLength);
             _ = Check.NotNullOrWhiteSpace(baseClass, nameof(baseClass), DiagramConsts.ClassNameMaxLength);
             _ = Check.NotNull(baseInterfaces, nameof(namespaceBeloningTo));
+
+            SolutionId = solutionId;
 
             var importsString = imports.Aggregate((i, j) => i + ";" + j);
             _ = Check.NotNull(importsString, nameof(importsString), DiagramConsts.ArrayStringMaxLength);
             _imports = importsString;
 
             NamespaceBelongingTo = namespaceBeloningTo;
-            ProjectFullPath = projectFullPath;
+            ProjectRelativePath = projectRelativePath;
             Directory = directory;
             Name = name;
             BaseClass = baseClass;

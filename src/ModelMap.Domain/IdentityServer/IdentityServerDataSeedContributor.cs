@@ -160,28 +160,28 @@ namespace ModelMap.IdentityServer
                     corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") }
                 );
             }
-            
 
-            // Blazor Client
-            var blazorClientId = configurationSection["ModelMap_Blazor:ClientId"];
-            if (!blazorClientId.IsNullOrWhiteSpace())
+
+            // Desktop Client
+            var desktopClientId = configurationSection["ModelMap_Desktop:ClientId"];
+            if (!desktopClientId.IsNullOrWhiteSpace())
             {
-                var blazorRootUrl = configurationSection["ModelMap_Blazor:RootUrl"].TrimEnd('/');
+                var desktopRootUrl = configurationSection["ModelMap_Desktop:RootUrl"].TrimEnd('/');
 
                 await CreateClientAsync(
-                    name: blazorClientId,
+                    name: desktopClientId,
                     scopes: commonScopes,
                     grantTypes: new[] { "authorization_code" },
-                    secret: configurationSection["ModelMap_Blazor:ClientSecret"]?.Sha256(),
+                    secret: configurationSection["ModelMap_Desktop:ClientSecret"]?.Sha256(),
                     requireClientSecret: false,
-                    redirectUri: $"{blazorRootUrl}/authentication/login-callback",
-                    postLogoutRedirectUri: $"{blazorRootUrl}/authentication/logout-callback",
-                    corsOrigins: new[] { blazorRootUrl.RemovePostFix("/") }
+                    redirectUri: $"{desktopRootUrl}/authentication/login-callback",
+                    postLogoutRedirectUri: $"{desktopRootUrl}/authentication/logout-callback",
+                    corsOrigins: new[] { desktopRootUrl.RemovePostFix("/") }
                 );
             }
-            
-            
-            
+
+
+
             // Swagger Client
             var swaggerClientId = configurationSection["ModelMap_Swagger:ClientId"];
             if (!swaggerClientId.IsNullOrWhiteSpace())

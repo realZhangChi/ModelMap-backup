@@ -12,8 +12,8 @@ namespace ModelMap.EntityFrameworkCore.EntityConfigurations.Solutions
             builder.ToTable(ModelMapConsts.DbTablePrefix + "Solutions", ModelMapConsts.DbSchema);
             builder.ConfigureByConvention();
 
-            var navigation = builder.Metadata.FindNavigation(nameof(Solution.Projects));
-            navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+            //var navigation = builder.Metadata.FindNavigation(nameof(Solution.Projects));
+            //navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }

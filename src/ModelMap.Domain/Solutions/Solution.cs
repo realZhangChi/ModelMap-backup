@@ -18,8 +18,8 @@ namespace ModelMap.Solutions
         [NotMapped]
         public virtual string Name => Path.GetFileNameWithoutExtension(AbsolutePath);
 
-        private readonly List<Project> _projects;
-        public virtual IReadOnlyCollection<Project> Projects => _projects;
+        //private readonly List<Project> _projects;
+        //public virtual IReadOnlyCollection<Project> Projects => _projects;
 
         protected Solution()
         {
@@ -42,5 +42,6 @@ namespace ModelMap.Solutions
 
             AbsolutePath = absolutePath;
         }
+
     }
 }
