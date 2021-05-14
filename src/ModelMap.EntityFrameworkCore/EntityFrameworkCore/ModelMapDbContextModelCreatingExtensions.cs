@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModelMap.EntityFrameworkCore.EntityConfigurations.Diagrams;
-using ModelMap.EntityFrameworkCore.EntityConfigurations.Solutions;
+using ModelMap.EntityFrameworkCore.Solutions.EntityConfigurations;
 using Volo.Abp;
 
 namespace ModelMap.EntityFrameworkCore

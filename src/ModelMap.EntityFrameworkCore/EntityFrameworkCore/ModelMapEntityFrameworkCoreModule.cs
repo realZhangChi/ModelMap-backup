@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using ModelMap.EntityFrameworkCore.Solutions;
+using ModelMap.Solutions;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -39,6 +41,7 @@ namespace ModelMap.EntityFrameworkCore
                 /* Remove "includeAllEntities: true" to create
                  * default repositories only for aggregate roots */
                 options.AddDefaultRepositories(includeAllEntities: false);
+                options.AddRepository<Solution, EfCoreSolutionRepository>();
             });
 
             Configure<AbpDbContextOptions>(options =>

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ModelMap.Solutions;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
-namespace ModelMap.EntityFrameworkCore.EntityConfigurations.Solutions
+namespace ModelMap.EntityFrameworkCore.Solutions.EntityConfigurations
 {
     class ProjectEntityTypeConfiguration : IEntityTypeConfiguration<Project>
     {

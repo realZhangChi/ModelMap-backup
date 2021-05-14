@@ -26,10 +26,12 @@ namespace ModelMap.Solutions
 
         }
 
-        public Solution(
+        protected internal Solution(
+            Guid id,
             [NotNull] string absolutePath)
+            : base(id)
         {
-            Check.NotNullOrWhiteSpace(absolutePath, nameof(absolutePath), SolutionConsts.PathMaxLength);
+            _ = Check.NotNullOrWhiteSpace(absolutePath, nameof(absolutePath), SolutionConsts.PathMaxLength);
 
             if (!Path.HasExtension(absolutePath) || Path.GetExtension(absolutePath) != ".sln")
             {

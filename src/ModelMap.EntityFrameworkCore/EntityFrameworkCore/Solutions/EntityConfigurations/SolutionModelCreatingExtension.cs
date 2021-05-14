@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 
-namespace ModelMap.EntityFrameworkCore.EntityConfigurations.Solutions
+namespace ModelMap.EntityFrameworkCore.Solutions.EntityConfigurations
 {
     internal static class SolutionModelCreatingExtension
     {

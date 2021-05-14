@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using IdentityServer4.Configuration;
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +14,24 @@ namespace ModelMap.Solutions
     [RemoteService]
     public class SolutionAppService : ModelMapAppService, ISolutionAppService
     {
-        protected IRepository<Solution> Repository => LazyServiceProvider.LazyGetRequiredService<IRepository<Solution>>();
+        protected ISolutionRepository Repository => LazyServiceProvider.LazyGetRequiredService<ISolutionRepository>();
+
+        protected ISolutionManager Manager => LazyServiceProvider.LazyGetRequiredService<ISolutionManager>();
 
         public async Task<SolutionDto> CreateAsync([NotNull] CreateSolutionDto input)
         {
-            var solution = new Solution(input.AbsolutePath);
+            var solution = await Manager.CreateAsync(input.AbsolutePath);
             _ = await Repository.InsertAsync(solution);
             return ObjectMapper.Map<Solution, SolutionDto>(solution);
+        }
+
+        public async Task<PagedResultDto<SolutionDto>> GetListAsync(SolutionPagedResultRequestDto input)
+        {
+            var count = await Repository.CountAsync(s => s.CreatorId == CurrentUser.Id);
+            var list = await Repository.GetListAsync(CurrentUser.Id, input.MaxResultCount, input.SkipCount);
+
+            return new PagedResultDto<SolutionDto>(count,
+                ObjectMapper.Map<List<Solution>, List<SolutionDto>>(list));
         }
     }
 }
