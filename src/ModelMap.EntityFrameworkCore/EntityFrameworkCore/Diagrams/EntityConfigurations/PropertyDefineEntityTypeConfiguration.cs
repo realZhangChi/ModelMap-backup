@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
-namespace ModelMap.EntityFrameworkCore.EntityConfigurations.Diagrams
+namespace ModelMap.EntityFrameworkCore.Diagrams.EntityConfigurations
 {
     class PropertyDefineEntityTypeConfiguration : IEntityTypeConfiguration<PropertyDefine>
     {

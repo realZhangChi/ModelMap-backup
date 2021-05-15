@@ -36,7 +36,7 @@ namespace ModelMap.Diagrams
 
         }
 
-        internal PropertyDefine(
+        protected internal PropertyDefine(
             Guid id,
             Guid entityId,
             [NotNull] string accessLevel,

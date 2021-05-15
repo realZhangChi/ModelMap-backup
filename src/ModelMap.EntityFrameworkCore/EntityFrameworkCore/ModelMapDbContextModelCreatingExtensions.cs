@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ModelMap.EntityFrameworkCore.EntityConfigurations.Diagrams;
+using ModelMap.EntityFrameworkCore.Diagrams.EntityConfigurations;
 using ModelMap.EntityFrameworkCore.Solutions.EntityConfigurations;
 using Volo.Abp;
 

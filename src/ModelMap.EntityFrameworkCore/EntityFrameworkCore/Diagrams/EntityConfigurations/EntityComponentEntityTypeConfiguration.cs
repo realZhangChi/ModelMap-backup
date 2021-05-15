@@ -2,13 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ModelMap.Diagrams;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
-namespace ModelMap.EntityFrameworkCore.EntityConfigurations.Diagrams
+namespace ModelMap.EntityFrameworkCore.Diagrams.EntityConfigurations
 {
     class EntityComponentEntityTypeConfiguration : IEntityTypeConfiguration<EntityComponent>
     {
@@ -19,11 +15,17 @@ namespace ModelMap.EntityFrameworkCore.EntityConfigurations.Diagrams
 
             builder.Property<string>("_imports")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
-                .HasColumnName("Imports");
+                .HasColumnName("Imports")
+                .HasMaxLength(DiagramConsts.ArrayStringMaxLength)
+                .IsRequired()
+                .HasDefaultValue(string.Empty);
 
             builder.Property<string>("_baseInterfaces")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
-                .HasColumnName("BaseInterfaces");
+                .HasColumnName("BaseInterfaces")
+                .HasMaxLength(DiagramConsts.ArrayStringMaxLength)
+                .IsRequired()
+                .HasDefaultValue(string.Empty);
 
             builder.OwnsOne(n => n.Position, p =>
             {

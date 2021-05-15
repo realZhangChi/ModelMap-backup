@@ -1,10 +1,12 @@
 ﻿@page "/designer/{SolutionPath}"
 @using ModelMap.Solutions
+@using ModelMap.Diagrams
 @using ModelMap.Desktop.Components.SolutionTrees
 @using ModelMap.Desktop.Components.Canvas
 @using ModelMap.Desktop.Components.ContextMenus
 @using ModelMap.Desktop.Models.ContextMenus
 @using ModelMap.Desktop.Services.Solution
+@inherits ModelMapDesktopComponentBase
 
 <div>
     <SolutionSidebar @ref="_solutionSidebar" Root="Solution?.RootNode" OnMouseUpCallBack="ShowContextMenuAsync"></SolutionSidebar>
@@ -45,6 +47,9 @@
 
     [Inject]
     public ISolutionService SolutionService { get; set; }
+
+    [Inject]
+    protected IEntityComponentAppService EntityComponentAppService { get; set; }
 
     protected SolutionTreeDto Solution { get; set; }
 
@@ -90,8 +95,9 @@
 
     private async Task AddEntityAsync()
     {
-        await _fabricCanvas.AddEntityAsync(_entityModel);
-
+        var dto = ObjectMapper.Map<EntityComponentModel, CreateEntityComponentDto>(_entityModel);
+        var entity = await EntityComponentAppService.CreateAsync(dto);
+        await _fabricCanvas.AddEntityAsync(ObjectMapper.Map<EntityComponentDto, EntityComponentModel>(entity));
     }
 
 }

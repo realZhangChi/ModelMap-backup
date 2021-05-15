@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 
-namespace ModelMap.EntityFrameworkCore.EntityConfigurations.Diagrams
+namespace ModelMap.EntityFrameworkCore.Diagrams.EntityConfigurations
 {
     internal static class DiagramModelCreatingExtensions
     {

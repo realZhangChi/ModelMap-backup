@@ -49,10 +49,10 @@ namespace ModelMap.Diagrams
 
         protected EntityComponent()
         {
-
+            _properties = new List<PropertyDefine>();
         }
 
-        protected EntityComponent(
+        protected internal EntityComponent(
             Guid id,
             Guid solutionId,
             [NotNull] ICollection<string> imports,
@@ -90,6 +90,36 @@ namespace ModelMap.Diagrams
             _baseInterfaces = baseInterfacesString;
 
             _properties = properties.ToList();
+        }
+
+        public EntityComponent AddProperty(
+            Guid id,
+            string accessLevel,
+            string type,
+            string name,
+            string getAccessLevel,
+            string setAccessLevel)
+        {
+            var property = new PropertyDefine(
+                id,
+                Id,
+                accessLevel,
+                type,
+                name,
+                getAccessLevel,
+                setAccessLevel
+                );
+
+            _properties.Add(property);
+
+            return this;
+        }
+
+        public EntityComponent RemoveAllProperties()
+        {
+            _properties.Clear();
+
+            return this;
         }
     }
 }

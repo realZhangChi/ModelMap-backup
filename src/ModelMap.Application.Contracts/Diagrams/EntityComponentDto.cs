@@ -7,13 +7,15 @@ namespace ModelMap.Diagrams
 {
     public class EntityComponentDto : FullAuditedEntityDto<Guid>
     {
+        public Guid SolutionId { get; set; }
+
         public virtual PositionDto Position { get; set; }
 
         public virtual List<string> Imports { get; set; }
 
         public virtual string NamespaceBelongingTo { get; set; }
 
-        public virtual string ProjectFullPath { get; set; }
+        public virtual string ProjectRelativePath { get; set; }
 
         public virtual string Directory { get; set; }
 
