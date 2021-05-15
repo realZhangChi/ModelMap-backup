@@ -7,7 +7,7 @@ using Microsoft.Web.WebView2.Wpf;
 
 namespace ModelMap.Desktop
 {
-    public class WpfEmbeddedBrowser : IBrowser
+    public class LoginBrowser : IBrowser
     {
         private BrowserOptions _options = null;
 

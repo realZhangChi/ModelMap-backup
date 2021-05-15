@@ -1,6 +1,7 @@
 ﻿using IdentityModel.OidcClient;
 using Microsoft.Extensions.DependencyInjection;
 using ModelMap.Desktop.Services.Identity;
+using ModelMap.Desktop.Services.Setting;
 using System;
 using System.Windows;
 
@@ -22,7 +23,7 @@ namespace ModelMap.Desktop
 
         private async void WindowLoadedAsync(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.AccessToken))
+            if (!string.IsNullOrWhiteSpace(_serviceProvider.GetRequiredService<ISettingService>()?.AccessToken))
             {
                 return;
             }

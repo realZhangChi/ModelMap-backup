@@ -18,7 +18,6 @@ namespace ModelMap.Desktop
         {
             context.Services.AddSingleton<MainWindow>();
             context.Services.AddBlazorWebView();
-
         }
     }
 }

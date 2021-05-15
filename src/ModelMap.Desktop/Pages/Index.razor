@@ -13,6 +13,18 @@
                 <i class="fa fa-folder-open"></i> Open
             </button>
         </div>
+
+        <div class="mt-5">
+            <h6>recent:</h6>
+            <div class="list-group list-group-flush mt-2">
+                @foreach (var solution in RecentlySolutions)
+                {
+                    <a href="/designer/@WebUtility.UrlEncode(solution.AbsolutePath)" class="list-group-item list-group-item-action">
+                        <small>@solution.AbsolutePath</small>
+                    </a>
+                }
+            </div>
+        </div>
     </div>
 </div>
 
@@ -31,11 +43,35 @@
     [Inject]
     protected ISolutionAppService SolutionAppService { get; set; }
 
+    protected ICollection<SolutionDto> RecentlySolutions { get; private set; }
+
+    public Index()
+    {
+
+        RecentlySolutions = new List<SolutionDto>();
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await base.OnAfterRenderAsync(firstRender);
-        _jsTask = new Lazy<Task<IJSObjectReference>>(() => JsRuntime.InvokeAsync<IJSObjectReference>(
+        if (firstRender)
+        {
+            _jsTask = new Lazy<Task<IJSObjectReference>>(() => JsRuntime.InvokeAsync<IJSObjectReference>(
             "import", "./index.js").AsTask());
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+
+        var solutions = (ICollection<SolutionDto>)(await SolutionAppService.GetListAsync(new SolutionPagedResultRequestDto()
+        {
+            SkipCount = 0,
+            MaxResultCount = 10
+        })).Items;
+        RecentlySolutions = solutions;
     }
 
     private async Task OnOpenSolutionClickedAsync()
@@ -48,4 +84,4 @@
         NavigationManager.NavigateTo($"designer/{WebUtility.UrlEncode(solutionPath)}");
     }
 
-}
+    }

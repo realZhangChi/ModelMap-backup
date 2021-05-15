@@ -11,7 +11,7 @@ namespace ModelMap.Desktop.Services.Identity
     {
         Task<UserInfoResult> GetUserInfoAsync();
 
-        Task LoginAsync();
+        Task<bool> LoginAsync();
 
         Task LogoutAsync();
 

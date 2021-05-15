@@ -1,1 +1,3 @@
-﻿/* Write here your styles for the Index page */
+﻿.list-group-item {
+    background: transparent;
+}

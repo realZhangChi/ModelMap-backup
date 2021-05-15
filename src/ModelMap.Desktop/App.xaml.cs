@@ -2,6 +2,8 @@
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ModelMap.Desktop.Services.Identity;
+using ModelMap.Desktop.Services.Setting;
 using Serilog;
 using Serilog.Events;
 using Volo.Abp;

@@ -16,7 +16,8 @@ namespace ModelMap.Desktop.Services.Identity
 
         public IdentityService(
             IConfiguration configuration,
-            ISettingService settingService)
+            ISettingService settingService,
+            IServiceProvider serviceProvider)
         {
             _settingService = settingService;
 
@@ -26,7 +27,7 @@ namespace ModelMap.Desktop.Services.Identity
                 ClientId = configuration["AuthServer:ClientId"],
                 Scope = configuration["AuthServer:Scope"],
                 RedirectUri = $"{configuration["AuthServer:RootUrl"].RemovePostFix("/")}/authentication/login-callback",
-                Browser = new WpfEmbeddedBrowser(),
+                Browser = new LoginBrowser(),
                 Policy = new Policy
                 {
                     RequireIdentityTokenSignature = false
@@ -40,19 +41,20 @@ namespace ModelMap.Desktop.Services.Identity
             throw new NotImplementedException();
         }
 
-        public async Task LoginAsync()
+        public async Task<bool> LoginAsync()
         {
             var loginResult = await _oidcClient.LoginAsync();
             if (loginResult.IsError)
             {
                 // TODO: handle login error
-                return;
+                return false;
             }
 
             _settingService.AccessToken = loginResult.AccessToken;
             _settingService.RefreshToken = loginResult.RefreshToken;
             _settingService.IdentityToken = loginResult.IdentityToken;
             _settingService.AccessTokenExpirationUnixTimeSeconds = loginResult.AccessTokenExpiration.ToUnixTimeSeconds();
+            return true;
         }
 
         public Task LogoutAsync()
