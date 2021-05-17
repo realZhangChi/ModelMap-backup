@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Modularity.PlugIns;
 
 namespace ModelMap.Desktop.Services.Solution
 {
@@ -18,6 +19,39 @@ namespace ModelMap.Desktop.Services.Solution
             "Properties"
         };
 
+        private readonly ICurrentSolution _currentSolution;
+
+        public SolutionService(ICurrentSolution currentSolution)
+        {
+            _currentSolution = currentSolution;
+        }
+
+        public Task<string> GetNamespaceAsync([NotNull] string csFileDirectory)
+        {
+            return Task.Run(() =>
+            {
+                var project = _currentSolution.Value.Projects
+                    .Where(p => csFileDirectory.StartsWith(Path.GetDirectoryName(p.FilePath))).SingleOrDefault();
+
+                if (project is null)
+                {
+                    // TODO: throw exception
+                }
+
+                var folders = csFileDirectory
+                    .Substring(Path.GetDirectoryName(project.FilePath).Length).RemovePreFix(Path.DirectorySeparatorChar.ToString())
+                    .Split(Path.DirectorySeparatorChar).ToList();
+                folders.RemoveAll(f => string.IsNullOrWhiteSpace(f));
+                var csNamespace = project.DefaultNamespace;
+                foreach (var folder in folders)
+                {
+                    csNamespace += $".{folder}";
+                }
+                return csNamespace;
+            });
+        }
+
+        // TODO: get model from ICurrentSolution
         public Task<SolutionTreeDto> GetSolutionModelAsync([NotNull] string path)
         {
             var directory = Path.GetDirectoryName(path);

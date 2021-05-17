@@ -12,6 +12,8 @@ namespace ModelMap.Diagrams
         {
             var entity = await Manager.CreateAsync(
                 input.SolutionId,
+                input.Position.Top,
+                input.Position.Left,
                 input.Imports,
                 input.NamespaceBelongingTo,
                 input.ProjectRelativePath,

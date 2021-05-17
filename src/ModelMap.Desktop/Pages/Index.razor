@@ -1,5 +1,4 @@
 ﻿@page "/"
-@using System.Net
 @using ModelMap.Desktop.Services.File
 @using ModelMap.Solutions
 
@@ -19,7 +18,7 @@
             <div class="list-group list-group-flush mt-2">
                 @foreach (var solution in RecentlySolutions)
                 {
-                    <a href="/designer/@WebUtility.UrlEncode(solution.AbsolutePath)" class="list-group-item list-group-item-action">
+                    <a href="/designer/@solution.Id" class="list-group-item list-group-item-action">
                         <small>@solution.AbsolutePath</small>
                     </a>
                 }
@@ -77,11 +76,11 @@
     private async Task OnOpenSolutionClickedAsync()
     {
         var solutionPath = await FileService.SelectFileAsync();
-        await SolutionAppService.CreateAsync(new CreateSolutionDto()
+        var solution = await SolutionAppService.CreateAsync(new CreateSolutionDto()
         {
             AbsolutePath = solutionPath
         });
-        NavigationManager.NavigateTo($"designer/{WebUtility.UrlEncode(solutionPath)}");
+        NavigationManager.NavigateTo($"designer/{solution.Id}");
     }
 
     }

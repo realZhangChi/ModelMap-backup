@@ -20,6 +20,8 @@ namespace ModelMap.Diagrams
 
         public async Task<EntityComponent> CreateAsync(
             Guid solutionId,
+            double top,
+            double left,
             ICollection<string> imports,
             [NotNull] string namespaceBeloningTo,
             [NotNull] string projectRelativePath,
@@ -46,6 +48,8 @@ namespace ModelMap.Diagrams
             var entity = new EntityComponent(
                 GuidGenerator.Create(),
                 solution.Id,
+                top,
+                left,
                 imports,
                 namespaceBeloningTo,
                 projectRelativePath,

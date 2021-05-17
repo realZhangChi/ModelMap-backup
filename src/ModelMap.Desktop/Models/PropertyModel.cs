@@ -24,7 +24,6 @@ namespace ModelMap.Desktop.Models
 
         public PropertyModel()
         {
-            AccessLevel = "public";
         }
     }
 }

@@ -39,24 +39,22 @@ namespace ModelMap.Diagrams
         protected internal PropertyDefine(
             Guid id,
             Guid entityId,
-            [NotNull] string accessLevel,
+            string accessLevel,
             [NotNull] string type,
             [NotNull] string name,
-            [NotNull] string getAccessLevel,
-            [NotNull] string setAccessLevel) : base(id)
+            string getAccessLevel,
+            string setAccessLevel) : base(id)
         {
-            _ = Check.NotNullOrWhiteSpace(accessLevel, nameof(accessLevel), DiagramConsts.AccessLevelMaxLength);
             _ = Check.NotNullOrWhiteSpace(type, nameof(type), DiagramConsts.TypeNameMaxLength);
             _ = Check.NotNullOrWhiteSpace(name, nameof(name), DiagramConsts.ClassNameMaxLength);
-            _ = Check.NotNullOrWhiteSpace(getAccessLevel, nameof(getAccessLevel), DiagramConsts.AccessLevelMaxLength);
-            _ = Check.NotNullOrWhiteSpace(setAccessLevel, nameof(setAccessLevel), DiagramConsts.AccessLevelMaxLength);
 
+            // TODO: AccessLevel Define
             EntityComponentId = entityId;
-            AccessLevel = accessLevel;
+            AccessLevel = string.IsNullOrWhiteSpace(accessLevel) ? "public" : accessLevel;
             Type = type;
             Name = name;
-            GetAccessLevel = getAccessLevel;
-            SetAccessLevel = setAccessLevel;
+            GetAccessLevel = string.IsNullOrWhiteSpace(getAccessLevel) ? string.Empty : getAccessLevel;
+            SetAccessLevel = string.IsNullOrWhiteSpace(setAccessLevel) ? string.Empty : setAccessLevel;
         }
     }
 }

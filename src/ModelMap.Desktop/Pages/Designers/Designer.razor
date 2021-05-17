@@ -1,4 +1,5 @@
-﻿@page "/designer/{SolutionPath}"
+﻿@page "/designer/{SolutionId}"
+@using Volo.Abp.EventBus.Distributed
 @using ModelMap.Solutions
 @using ModelMap.Diagrams
 @using ModelMap.Desktop.Components.SolutionTrees
@@ -9,7 +10,7 @@
 @inherits ModelMapDesktopComponentBase
 
 <div>
-    <SolutionSidebar @ref="_solutionSidebar" Root="Solution?.RootNode" OnMouseUpCallBack="ShowContextMenuAsync"></SolutionSidebar>
+    <SolutionSidebar @ref="_solutionSidebar" Root="SolutionTree?.RootNode" OnMouseUpCallBack="ShowContextMenuAsync"></SolutionSidebar>
 
     <div class="content">
         <FabricCanvas @ref="_fabricCanvas" />
@@ -43,15 +44,23 @@
     private FabricCanvas _fabricCanvas;
 
     [Parameter]
-    public string SolutionPath { get; set; }
+    public string SolutionId { get; set; }
 
     [Inject]
-    public ISolutionService SolutionService { get; set; }
+    protected ISolutionService SolutionService { get; set; }
+
+    [Inject]
+    protected ISolutionAppService SolutionAppService { get; set; }
 
     [Inject]
     protected IEntityComponentAppService EntityComponentAppService { get; set; }
 
-    protected SolutionTreeDto Solution { get; set; }
+    [Inject]
+    protected IDistributedEventBus EventBus { get; set; }
+
+    protected SolutionDto Solution { get; set; }
+
+    protected SolutionTreeDto SolutionTree { get; set; }
 
 
     public Designer()
@@ -63,12 +72,18 @@
     {
         await base.OnParametersSetAsync();
 
-        Solution = await SolutionService.GetSolutionModelAsync(SolutionPath);
+        Solution = await SolutionAppService.GetAsync(Guid.Parse(SolutionId));
+        SolutionTree = await SolutionService.GetSolutionModelAsync(Solution.AbsolutePath);
+        await EventBus.PublishAsync(new SolutionChangedEvent()
+        {
+            SolutionPath = Solution.AbsolutePath
+        });
     }
 
     private Task ShowContextMenuAsync(MouseEventArgs e)
     {
-        if (e.Button != 2)
+        if (e.Button != 2 ||
+            _solutionSidebar.SelectedNodeReference.NodeModel.IsFile)
         {
             return Task.CompletedTask;
         }
@@ -95,8 +110,20 @@
 
     private async Task AddEntityAsync()
     {
+        var filePath = _solutionSidebar.SelectedNodeReference.NodeModel.Path;
+        var selectedNamespace = await SolutionService.GetNamespaceAsync(filePath);
         var dto = ObjectMapper.Map<EntityComponentModel, CreateEntityComponentDto>(_entityModel);
+        dto.NamespaceBelongingTo = selectedNamespace;
+        dto.Directory = filePath;
+        dto.SolutionId = Solution.Id;
+        dto.Position = new PositionDto()
+        {
+            Top = (await _fabricCanvas.GetHeightAsync()) / 2,
+            Left = (await _fabricCanvas.GetWidthAsync()) / 2
+        };
+        dto.ProjectRelativePath = @"\src\Acme.BookStore.Application\";
         var entity = await EntityComponentAppService.CreateAsync(dto);
+
         await _fabricCanvas.AddEntityAsync(ObjectMapper.Map<EntityComponentDto, EntityComponentModel>(entity));
     }
 

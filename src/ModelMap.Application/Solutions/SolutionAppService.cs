@@ -1,9 +1,6 @@
-﻿using IdentityServer4.Configuration;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -22,6 +19,12 @@ namespace ModelMap.Solutions
         {
             var solution = await Manager.CreateAsync(input.AbsolutePath);
             _ = await Repository.InsertAsync(solution);
+            return ObjectMapper.Map<Solution, SolutionDto>(solution);
+        }
+
+        public async Task<SolutionDto> GetAsync(Guid id)
+        {
+            var solution = await Repository.GetAsync(id);
             return ObjectMapper.Map<Solution, SolutionDto>(solution);
         }
 

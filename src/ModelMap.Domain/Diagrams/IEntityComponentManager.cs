@@ -11,6 +11,8 @@ namespace ModelMap.Diagrams
     {
         Task<EntityComponent> CreateAsync(
             Guid solutionId,
+            double top,
+            double left,
             ICollection<string> imports,
             [NotNull] string namespaceBeloningTo,
             [NotNull] string projectRelativePath,

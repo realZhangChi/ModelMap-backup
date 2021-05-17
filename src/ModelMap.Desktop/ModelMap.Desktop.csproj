@@ -11,6 +11,10 @@
 		<PackageReference Include="AutoMapper" Version="10.1.1" />
 		<PackageReference Include="IdentityModel.OidcClient" Version="4.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Wpf" Version="6.0.0-preview.3.21201.13" />
+		<PackageReference Include="Microsoft.Build.Locator" Version="1.4.1" />
+		<PackageReference Include="Microsoft.CodeAnalysis" Version="3.9.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="3.9.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="3.9.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0-preview.3.21201.4" />
 		<PackageReference Include="Volo.Abp.AspNetCore.Components" Version="4.3.0" />
 		<PackageReference Include="Volo.Abp.Autofac" Version="4.3.0" />
@@ -18,6 +22,7 @@
 		<PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
 		<PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
 		<PackageReference Include="Volo.Abp.AutoMapper" Version="4.3.0" />
+		<PackageReference Include="Volo.Abp.EventBus" Version="4.3.0" />
 		<PackageReference Include="Volo.Abp.Http.Client.IdentityModel" Version="4.3.0" />
 	</ItemGroup>
 

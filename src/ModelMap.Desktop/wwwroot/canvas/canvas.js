@@ -102,8 +102,8 @@ export function addEntity(model) {
 
 
     var dimensions = getContainerDimensions();
-    options.left = (dimensions.width - options.width) / 2;
-    options.top = (dimensions.height - options.height) / 2;
+    options.left = model.position.left;
+    options.top = model.position.top;
 
     var objects = [];
 
@@ -191,6 +191,14 @@ export function addEntity(model) {
         mtr: false,
     });
     canvas.add(classComponent);
+}
+
+export function getWidth() {
+    return getContainerDimensions().width;
+}
+
+export function getHeight() {
+    return getContainerDimensions().height;
 }
 
 function setDimensions() {

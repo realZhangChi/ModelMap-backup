@@ -16,16 +16,14 @@ namespace ModelMap.EntityFrameworkCore.Diagrams.EntityConfigurations
             builder.Property<string>("_imports")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
                 .HasColumnName("Imports")
-                .HasMaxLength(DiagramConsts.ArrayStringMaxLength)
-                .IsRequired()
-                .HasDefaultValue(string.Empty);
+                .HasColumnType($"varchar({DiagramConsts.ArrayStringMaxLength}) CHARACTER SET utf8mb4")
+                .HasMaxLength(DiagramConsts.ArrayStringMaxLength);
 
             builder.Property<string>("_baseInterfaces")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
                 .HasColumnName("BaseInterfaces")
-                .HasMaxLength(DiagramConsts.ArrayStringMaxLength)
-                .IsRequired()
-                .HasDefaultValue(string.Empty);
+                .HasColumnType($"varchar({DiagramConsts.ArrayStringMaxLength}) CHARACTER SET utf8mb4")
+                .HasMaxLength(DiagramConsts.ArrayStringMaxLength);
 
             builder.OwnsOne(n => n.Position, p =>
             {

@@ -14,9 +14,15 @@ namespace ModelMap.Diagrams
 
         }
 
-        protected ComponentBase(Guid id) : base(id)
+        private ComponentBase(Guid id) : base(id)
         {
 
+        }
+
+        protected ComponentBase(Guid id, double top, double left)
+            : base(id)
+        {
+            Position = new Position(top, left);
         }
     }
 }
