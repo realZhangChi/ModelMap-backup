@@ -43,18 +43,21 @@ namespace ModelMap.Desktop.Services.Identity
 
         public async Task<bool> LoginAsync()
         {
-            var loginResult = await _oidcClient.LoginAsync();
-            if (loginResult.IsError)
+            return await App.Current.Dispatcher.Invoke(async () =>
             {
-                // TODO: handle login error
-                return false;
-            }
+                var loginResult = await _oidcClient.LoginAsync();
+                if (loginResult.IsError)
+                {
+                    // TODO: handle login error
+                    return false;
+                }
 
-            _settingService.AccessToken = loginResult.AccessToken;
-            _settingService.RefreshToken = loginResult.RefreshToken;
-            _settingService.IdentityToken = loginResult.IdentityToken;
-            _settingService.AccessTokenExpirationUnixTimeSeconds = loginResult.AccessTokenExpiration.ToUnixTimeSeconds();
-            return true;
+                _settingService.AccessToken = loginResult.AccessToken;
+                _settingService.RefreshToken = loginResult.RefreshToken;
+                _settingService.IdentityToken = loginResult.IdentityToken;
+                _settingService.AccessTokenExpirationUnixTimeSeconds = loginResult.AccessTokenExpiration.ToUnixTimeSeconds();
+                return true;
+            });
         }
 
         public Task LogoutAsync()
@@ -67,12 +70,12 @@ namespace ModelMap.Desktop.Services.Identity
                 });
         }
 
-        public async Task RefreshTokenAsync()
+        public async Task<bool> RefreshTokenAsync()
         {
             var refreshToken = _settingService.RefreshToken;
             if (string.IsNullOrWhiteSpace(refreshToken))
             {
-                return;
+                return false;
             }
 
             var refreshResult = await _oidcClient.RefreshTokenAsync(_settingService.RefreshToken);
@@ -80,12 +83,13 @@ namespace ModelMap.Desktop.Services.Identity
             if (refreshResult.IsError)
             {
                 // TODO: handle Error
-                return;
+                return false;
             }
 
             _settingService.AccessToken = refreshResult.AccessToken;
             _settingService.RefreshToken = refreshResult.RefreshToken;
             _settingService.AccessTokenExpirationUnixTimeSeconds = refreshResult.AccessTokenExpiration.ToUnixTimeSeconds();
+            return true;
         }
     }
 }

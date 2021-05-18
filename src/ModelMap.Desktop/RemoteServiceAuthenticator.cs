@@ -34,10 +34,16 @@ namespace ModelMap.Desktop
             if (context.RemoteService.GetUseCurrentAccessToken() != false)
             {
                 var expireAt = _settingService.AccessTokenExpirationUnixTimeSeconds;
-                var timespan = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                if (expireAt > 0 && expireAt - DateTimeOffset.UtcNow.ToUnixTimeSeconds() < 600)
+                if (string.IsNullOrWhiteSpace(_settingService.AccessToken))
                 {
-                    await _identityService.RefreshTokenAsync();
+                    await _identityService.LoginAsync();
+                }
+                else if (expireAt > 0 && expireAt - DateTimeOffset.UtcNow.ToUnixTimeSeconds() < 600)
+                {
+                    if (!await _identityService.RefreshTokenAsync())
+                    {
+                        await _identityService.LoginAsync();
+                    }
                 }
 
                 var accessToken = _settingService.AccessToken;

@@ -15,6 +15,6 @@ namespace ModelMap.Desktop.Services.Identity
 
         Task LogoutAsync();
 
-        Task RefreshTokenAsync();
+        Task<bool> RefreshTokenAsync();
     }
 }

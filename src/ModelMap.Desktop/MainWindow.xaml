@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:ModelMap.Desktop"
         xmlns:blazor="clr-namespace:Microsoft.AspNetCore.Components.WebView.Wpf;assembly=Microsoft.AspNetCore.Components.WebView.Wpf"
         mc:Ignorable="d"
-        Loaded="WindowLoadedAsync"
         Title="MainWindow" Height="900" Width="1200">
     <Grid>
         <blazor:BlazorWebView HostPage="wwwroot/index.html" Services="{StaticResource services}">
