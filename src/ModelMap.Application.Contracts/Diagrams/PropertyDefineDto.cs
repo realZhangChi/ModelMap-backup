@@ -16,5 +16,7 @@ namespace ModelMap.Diagrams
         public string GetAccessLevel { get; set; }
 
         public string SetAccessLevel { get; set; }
+
+        public Guid EntityComponentId { get; set; }
     }
 }

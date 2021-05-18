@@ -9,22 +9,22 @@ namespace ModelMap.Diagrams
     {
         public Guid SolutionId { get; set; }
 
-        public virtual PositionDto Position { get; set; }
+        public PositionDto Position { get; set; }
 
-        public virtual List<string> Imports { get; set; }
+        public List<string> Imports { get; set; }
 
-        public virtual string NamespaceBelongingTo { get; set; }
+        public string NamespaceBelongingTo { get; set; }
 
-        public virtual string ProjectRelativePath { get; set; }
+        public string ProjectRelativePath { get; set; }
 
-        public virtual string Directory { get; set; }
+        public string Directory { get; set; }
 
-        public virtual string Name { get; set; }
+        public string Name { get; set; }
 
-        public virtual string BaseClass { get; set; }
+        public string BaseClass { get; set; }
 
-        public virtual List<string> BaseInterfaces { get; set; }
+        public List<string> BaseInterfaces { get; set; }
 
-        public virtual List<PropertyDefineDto> Properties { get; set; }
+        public List<PropertyDefineDto> Properties { get; set; }
     }
 }

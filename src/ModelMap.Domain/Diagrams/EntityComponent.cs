@@ -67,7 +67,6 @@ namespace ModelMap.Diagrams
             _ = Check.NotNullOrWhiteSpace(namespaceBeloningTo, nameof(namespaceBeloningTo), DiagramConsts.NamespaceMaxLength);
             _ = Check.NotNullOrWhiteSpace(projectRelativePath, nameof(projectRelativePath), DiagramConsts.PathMaxLength);
             _ = Check.NotNullOrWhiteSpace(directory, nameof(directory), DiagramConsts.PathMaxLength);
-            _ = Check.NotNullOrWhiteSpace(name, nameof(name), DiagramConsts.ClassNameMaxLength);
 
             SolutionId = solutionId;
 
@@ -78,7 +77,6 @@ namespace ModelMap.Diagrams
             NamespaceBelongingTo = namespaceBeloningTo;
             ProjectRelativePath = projectRelativePath;
             Directory = directory;
-            Name = name;
             BaseClass = baseClass;
 
             var baseInterfacesString = baseInterfaces is { Count: > 0 } ? baseInterfaces.Aggregate((i, j) => i + ";" + j) : string.Empty;
@@ -86,6 +84,15 @@ namespace ModelMap.Diagrams
             _baseInterfaces = baseInterfacesString;
 
             _properties = properties.ToList();
+
+            SetName(name);
+        }
+
+        public EntityComponent SetName([NotNull] string name)
+        {
+            _ = Check.NotNullOrWhiteSpace(name, nameof(name), DiagramConsts.ClassNameMaxLength);
+            Name = name;
+            return this;
         }
 
         public EntityComponent AddProperty(

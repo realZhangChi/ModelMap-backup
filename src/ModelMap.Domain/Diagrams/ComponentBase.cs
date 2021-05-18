@@ -22,7 +22,13 @@ namespace ModelMap.Diagrams
         protected ComponentBase(Guid id, double top, double left)
             : base(id)
         {
+            SetPosition(top, left);
+        }
+
+        public ComponentBase SetPosition(double top, double left)
+        {
             Position = new Position(top, left);
+            return this;
         }
     }
 }

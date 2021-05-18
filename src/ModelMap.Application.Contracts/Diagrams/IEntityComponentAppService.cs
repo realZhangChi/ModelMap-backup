@@ -11,5 +11,11 @@ namespace ModelMap.Diagrams
 
         // TODO: get list by cavas viewport center
         Task<ICollection<EntityComponentDto>> GetListAsync(Guid solutionId);
+
+        Task<EntityComponentDto> GetAsync(Guid id);
+
+        Task<EntityComponentDto> UpdateAsync(Guid id, UpdateEntityComponentDto input);
+
+        Task DeleteAsync(Guid id);
     }
 }

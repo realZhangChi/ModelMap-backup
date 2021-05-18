@@ -16,8 +16,7 @@ namespace ModelMap.Desktop.Pages.Designers
         [JSInvokable]
         public Task ShowCanvasContextMenuAsync(Guid id, double clientX, double clientY)
         {
-            _action.Invoke(id, clientX, clientY);
-            return Task.CompletedTask;
+            return _action.Invoke(id, clientX, clientY);
         }
     }
 }

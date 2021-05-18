@@ -20,7 +20,7 @@
 <ContextMenu @ref="_solutionContextMenu"></ContextMenu>
 <ContextMenu @ref="_canvasContextMenu"></ContextMenu>
 
-<Modal @ref="_entityModal" Title="Add New Entity" Size="ModalSize.Large" ModalSaveClickCallBack="AddEntityAsync" ModalCloseClickCallBack="ModalClosedAsync">
+<Modal @ref="_entityModal" Title="Add New Entity" Size="ModalSize.Large" ModalSaveClickCallBack="SaveEntityAsync" ModalCloseClickCallBack="ModalClosedAsync">
     <ModalBody>
         <div class="mb-3">
             <label class="form-label" for="entityName">Name</label>
@@ -136,29 +136,42 @@
         await _entityModal.ShowAsync();
     }
 
+    private async Task ShowEditEntityModalAsync()
+    {
+        await _entityModal.ShowAsync();
+    }
+
     private Task ModalClosedAsync()
     {
         _entityModel = new EntityComponentModel();
         return Task.CompletedTask;
     }
 
-    private async Task AddEntityAsync()
+    private async Task SaveEntityAsync()
     {
-        var filePath = _solutionSidebar.SelectedNodeReference.NodeModel.Path;
-        var selectedNamespace = await SolutionService.GetNamespaceAsync(filePath);
-        var dto = ObjectMapper.Map<EntityComponentModel, CreateEntityComponentDto>(_entityModel);
-        var entity = await EntityComponentAppService.CreateAsync(dto);
+        if (_entityModel.Id is null)
+        {
+            var dto = ObjectMapper.Map<EntityComponentModel, CreateEntityComponentDto>(_entityModel);
+            var entity = await EntityComponentAppService.CreateAsync(dto);
+            await _fabricCanvas.AddEntityAsync(ObjectMapper.Map<EntityComponentDto, EntityComponentModel>(entity));
+        }
+        else
+        {
+            var dto = ObjectMapper.Map<EntityComponentModel, UpdateEntityComponentDto>(_entityModel);
+            var entity = await EntityComponentAppService.UpdateAsync(_entityModel.Id.Value, dto);
+        }
 
-        await _fabricCanvas.AddEntityAsync(ObjectMapper.Map<EntityComponentDto, EntityComponentModel>(entity));
     }
 
-    public Task ShowCanvasContextMenuAsync(Guid id, double clientX, double clientY)
+    public async Task ShowCanvasContextMenuAsync(Guid id, double clientX, double clientY)
     {
+        var entity = await EntityComponentAppService.GetAsync(id);
+        _entityModel = ObjectMapper.Map<EntityComponentDto, EntityComponentModel>(entity);
         var option = new ContextMenuOptionModel(
-                            "Add New Entity",
-                            EventCallback.Factory.Create(this, ShowAddEntityModalAsync)
+                            "Edit",
+                            EventCallback.Factory.Create(this, ShowEditEntityModalAsync)
                             );
-        return _solutionContextMenu.ShowAsync(
+        await _canvasContextMenu.ShowAsync(
             new()
             {
                 option

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.ObjectMapping;
 
 namespace ModelMap.Diagrams
 {
@@ -42,10 +43,32 @@ namespace ModelMap.Diagrams
             return ObjectMapper.Map<EntityComponent, EntityComponentDto>(entity);
         }
 
+        public Task DeleteAsync(Guid id)
+        {
+            return Repository.DeleteAsync(id);
+        }
+
+        public async Task<EntityComponentDto> GetAsync(Guid id)
+        {
+            var entity = await Repository.GetAsync(id);
+            var dto = ObjectMapper.Map<EntityComponent, EntityComponentDto>(
+                entity
+                );
+            return dto;
+        }
+
         public async Task<ICollection<EntityComponentDto>> GetListAsync(Guid solutionId)
         {
             return ObjectMapper.Map<List<EntityComponent>, List<EntityComponentDto>>(
                 await Repository.GetListAsync(e => e.SolutionId == solutionId, true));
+        }
+
+        public async Task<EntityComponentDto> UpdateAsync(Guid id, UpdateEntityComponentDto input)
+        {
+            var entity = await Repository.GetAsync(id);
+            _ = ObjectMapper.Map(input, entity);
+            _ = await Repository.UpdateAsync(entity);
+            return ObjectMapper.Map<EntityComponent, EntityComponentDto>(entity);
         }
     }
 }

@@ -207,6 +207,10 @@ export function addEntity(model) {
     canvas.add(classComponent);
 }
 
+export function removeEntity(target) {
+    target.remove();
+}
+
 export function getCenterX() {
     return canvas.getVpCenter().x;
 }

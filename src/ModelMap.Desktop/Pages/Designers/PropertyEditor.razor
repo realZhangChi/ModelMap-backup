@@ -1,13 +1,13 @@
 ﻿
 <div class="mb-3">
     <label class="form-label">Properties</label>
-    <button class="btn btn-sm btn-outline-primary m-3" @onclick="AddProperty"><i class="fa fa-plus"></i></button>
+    <button class="btn btn-sm btn-outline-primary m-3" @onclick="AddProperty"><i class="fa fa-fw fa-plus"></i></button>
     @foreach (var item in EntityModel.Properties.Select((p, i) => new { Property = p, Index = i }))
     {
         <div class="row mb-2 ml-3">
             <div class="col-auto">
                 <button class="btn btn-outline-primary btn-sm btn-collapse" @onclick="@(() => EntityModel.Properties[item.Index].Collapse = !EntityModel.Properties[item.Index].Collapse)">
-                    <i class="fa @item.Property.CollapseIconStyle"></i>
+                    <i class="fa fa-fw @item.Property.CollapseIconStyle"></i>
                 </button>
             </div>
             <div class="col-auto">
