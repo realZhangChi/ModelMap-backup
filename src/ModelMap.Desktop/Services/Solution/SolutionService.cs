@@ -51,6 +51,16 @@ namespace ModelMap.Desktop.Services.Solution
             });
         }
 
+        public Task<string> GetProjectRelativePathAsync([NotNull] string path)
+        {
+            return Task.Run(() =>
+            {
+                var project = _currentSolution.Value.Projects
+                    .Where(p => path.StartsWith(Path.GetDirectoryName(p.FilePath))).SingleOrDefault();
+                return Path.GetRelativePath(Path.GetDirectoryName(_currentSolution.Value.FilePath), project.FilePath);
+            });
+        }
+
         // TODO: get model from ICurrentSolution
         public Task<SolutionTreeDto> GetSolutionModelAsync([NotNull] string path)
         {

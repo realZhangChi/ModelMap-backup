@@ -19,7 +19,7 @@
 
 <ContextMenu @ref="_contextMenu"></ContextMenu>
 
-<Modal @ref="_entityModal" Title="Add New Entity" Size="ModalSize.Large" ModalSaveClickCallBack="AddEntityAsync">
+<Modal @ref="_entityModal" Title="Add New Entity" Size="ModalSize.Large" ModalSaveClickCallBack="AddEntityAsync" ModalCloseClickCallBack="ModalClosedAsync">
     <ModalBody>
         <div class="mb-3">
             <label class="form-label" for="entityName">Name</label>
@@ -103,9 +103,25 @@
     }
 
 
-    private Task ShowAddEntityModalAsync()
+    private async Task ShowAddEntityModalAsync()
     {
-        return _entityModal.ShowAsync();
+        var filePath = _solutionSidebar.SelectedNodeReference.NodeModel.Path;
+        _entityModel.NamespaceBelongingTo = await SolutionService.GetNamespaceAsync(filePath);
+        _entityModel.Directory = filePath;
+        _entityModel.SolutionId = Solution.Id;
+        _entityModel.Position = new PositionDto()
+        {
+            Top = await _fabricCanvas.GetCenterYAsync(),
+            Left = await _fabricCanvas.GetCenterXAsync()
+        };
+        _entityModel.ProjectRelativePath = await SolutionService.GetProjectRelativePathAsync(filePath);
+        await _entityModal.ShowAsync();
+    }
+
+    private Task ModalClosedAsync()
+    {
+        _entityModel = new EntityComponentModel();
+        return Task.CompletedTask;
     }
 
     private async Task AddEntityAsync()
@@ -113,15 +129,6 @@
         var filePath = _solutionSidebar.SelectedNodeReference.NodeModel.Path;
         var selectedNamespace = await SolutionService.GetNamespaceAsync(filePath);
         var dto = ObjectMapper.Map<EntityComponentModel, CreateEntityComponentDto>(_entityModel);
-        dto.NamespaceBelongingTo = selectedNamespace;
-        dto.Directory = filePath;
-        dto.SolutionId = Solution.Id;
-        dto.Position = new PositionDto()
-        {
-            Top = (await _fabricCanvas.GetHeightAsync()) / 2,
-            Left = (await _fabricCanvas.GetWidthAsync()) / 2
-        };
-        dto.ProjectRelativePath = @"\src\Acme.BookStore.Application\";
         var entity = await EntityComponentAppService.CreateAsync(dto);
 
         await _fabricCanvas.AddEntityAsync(ObjectMapper.Map<EntityComponentDto, EntityComponentModel>(entity));

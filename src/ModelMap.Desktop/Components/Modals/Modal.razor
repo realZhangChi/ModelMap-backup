@@ -20,7 +20,7 @@
     </div>
 </div>
 
-@code{
+@code {
     private Lazy<Task<IJSObjectReference>> _jsTask;
 
     private string _id = Guid.NewGuid().ToString("N");
@@ -36,6 +36,10 @@
 
     [Parameter]
     public EventCallback ModalSaveClickCallBack { get; set; }
+
+
+    [Parameter]
+    public EventCallback ModalCloseClickCallBack { get; set; }
 
     [Inject]
     private IJSRuntime JsRuntime { get; set; }
@@ -57,10 +61,12 @@
     {
         var js = await _jsTask.Value;
         await js.InvokeVoidAsync("hide", _id);
+        await ModalCloseClickCallBack.InvokeAsync();
     }
 
     public async Task SaveAsync()
     {
+        // must invoke save callback first!
         await ModalSaveClickCallBack.InvokeAsync();
         await HideAsync();
     }

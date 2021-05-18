@@ -193,12 +193,12 @@ export function addEntity(model) {
     canvas.add(classComponent);
 }
 
-export function getWidth() {
-    return getContainerDimensions().width;
+export function getCenterX() {
+    return canvas.getVpCenter().x;
 }
 
-export function getHeight() {
-    return getContainerDimensions().height;
+export function getCenterY() {
+    return canvas.getVpCenter().y;
 }
 
 function setDimensions() {

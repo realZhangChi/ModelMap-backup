@@ -14,5 +14,7 @@ namespace ModelMap.Desktop.Services.Solution
         Task<SolutionTreeDto> GetSolutionModelAsync([NotNull] string path);
 
         Task<string> GetNamespaceAsync([NotNull] string csFileDirectory);
+
+        Task<string> GetProjectRelativePathAsync([NotNull] string path);
     }
 }

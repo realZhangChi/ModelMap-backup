@@ -36,15 +36,15 @@
         await js.InvokeVoidAsync("addEntity", entityModel);
     }
 
-    public async Task<double> GetWidthAsync()
+    public async Task<double> GetCenterXAsync()
     {
         var js = await _jsTask.Value;
-        return await js.InvokeAsync<double>("getWidth");
+        return await js.InvokeAsync<double>("getCenterX");
     }
 
-    public async Task<double> GetHeightAsync()
+    public async Task<double> GetCenterYAsync()
     {
         var js = await _jsTask.Value;
-        return await js.InvokeAsync<double>("getHeight");
+        return await js.InvokeAsync<double>("getCenterX");
     }
 }
