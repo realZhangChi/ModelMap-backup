@@ -78,6 +78,12 @@
         {
             SolutionPath = Solution.AbsolutePath
         });
+
+        var entities = await EntityComponentAppService.GetListAsync(Solution.Id);
+        foreach (var entity in entities)
+        {
+            await _fabricCanvas.AddEntityAsync(ObjectMapper.Map<EntityComponentDto, EntityComponentModel>(entity));
+        }
     }
 
     private Task ShowContextMenuAsync(MouseEventArgs e)

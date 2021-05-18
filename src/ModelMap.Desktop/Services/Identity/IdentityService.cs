@@ -83,6 +83,10 @@ namespace ModelMap.Desktop.Services.Identity
             if (refreshResult.IsError)
             {
                 // TODO: handle Error
+                _settingService.AccessToken = default;
+                _settingService.RefreshToken = default;
+                _settingService.IdentityToken = default;
+                _settingService.AccessTokenExpirationUnixTimeSeconds = default;
                 return false;
             }
 

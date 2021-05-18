@@ -34,6 +34,8 @@ namespace ModelMap.Desktop
             if (context.RemoteService.GetUseCurrentAccessToken() != false)
             {
                 var expireAt = _settingService.AccessTokenExpirationUnixTimeSeconds;
+                var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                var minusResult = expireAt - DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 if (string.IsNullOrWhiteSpace(_settingService.AccessToken))
                 {
                     await _identityService.LoginAsync();

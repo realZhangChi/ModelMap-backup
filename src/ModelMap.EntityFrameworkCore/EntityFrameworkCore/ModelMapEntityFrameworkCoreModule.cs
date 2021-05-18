@@ -1,9 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using ModelMap.Diagrams;
 using ModelMap.EntityFrameworkCore.Solutions;
 using ModelMap.Solutions;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore.MySQL;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -49,6 +52,14 @@ namespace ModelMap.EntityFrameworkCore
                 /* The main point to change your DBMS.
                  * See also ModelMapMigrationsDbContextFactory for EF Core tooling. */
                 options.UseMySQL();
+            });
+
+            Configure<AbpEntityOptions>(options =>
+            {
+                options.Entity<EntityComponent>(orderOptions =>
+                {
+                    orderOptions.DefaultWithDetailsFunc = query => query.Include(o => o.Properties);
+                });
             });
         }
     }

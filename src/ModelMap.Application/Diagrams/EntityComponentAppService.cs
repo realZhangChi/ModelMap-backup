@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp;
 
 namespace ModelMap.Diagrams
@@ -7,6 +9,7 @@ namespace ModelMap.Diagrams
     public class EntityComponentAppService : ModelMapAppService, IEntityComponentAppService
     {
         protected IEntityComponentManager Manager => LazyServiceProvider.LazyGetRequiredService<IEntityComponentManager>();
+        protected IEntityComponentRepository Repository => LazyServiceProvider.LazyGetRequiredService<IEntityComponentRepository>();
 
         public async Task<EntityComponentDto> CreateAsync(CreateEntityComponentDto input)
         {
@@ -37,6 +40,12 @@ namespace ModelMap.Diagrams
             }
 
             return ObjectMapper.Map<EntityComponent, EntityComponentDto>(entity);
+        }
+
+        public async Task<ICollection<EntityComponentDto>> GetListAsync(Guid solutionId)
+        {
+            return ObjectMapper.Map<List<EntityComponent>, List<EntityComponentDto>>(
+                await Repository.GetListAsync(e => e.SolutionId == solutionId, true));
         }
     }
 }
