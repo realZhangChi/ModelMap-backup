@@ -17,7 +17,8 @@
     </div>
 </div>
 
-<ContextMenu @ref="_contextMenu"></ContextMenu>
+<ContextMenu @ref="_solutionContextMenu"></ContextMenu>
+<ContextMenu @ref="_canvasContextMenu"></ContextMenu>
 
 <Modal @ref="_entityModal" Title="Add New Entity" Size="ModalSize.Large" ModalSaveClickCallBack="AddEntityAsync" ModalCloseClickCallBack="ModalClosedAsync">
     <ModalBody>
@@ -35,7 +36,9 @@
 
     private SolutionSidebar _solutionSidebar;
 
-    private ContextMenu _contextMenu;
+    private ContextMenu _solutionContextMenu;
+
+    private ContextMenu _canvasContextMenu;
 
     private Modal _entityModal;
 
@@ -58,10 +61,12 @@
     [Inject]
     protected IDistributedEventBus EventBus { get; set; }
 
+    [Inject]
+    private IJSRuntime JsRuntime { get; set; }
+
     protected SolutionDto Solution { get; set; }
 
     protected SolutionTreeDto SolutionTree { get; set; }
-
 
     public Designer()
     {
@@ -86,6 +91,13 @@
         }
     }
 
+    protected override Task OnInitializedAsync()
+    {
+        var invokeHelper = new DesignerInvokeHelper(ShowCanvasContextMenuAsync);
+        JsRuntime.InvokeVoidAsync("initDesigner", DotNetObjectReference.Create(invokeHelper));
+        return base.OnInitializedAsync();
+    }
+
     private Task ShowContextMenuAsync(MouseEventArgs e)
     {
         if (e.Button != 2 ||
@@ -99,7 +111,7 @@
                             "Add New Entity",
                             EventCallback.Factory.Create(this, ShowAddEntityModalAsync)
                             );
-        return _contextMenu.ShowAsync(
+        return _solutionContextMenu.ShowAsync(
             new()
             {
                 option
@@ -140,4 +152,18 @@
         await _fabricCanvas.AddEntityAsync(ObjectMapper.Map<EntityComponentDto, EntityComponentModel>(entity));
     }
 
+    public Task ShowCanvasContextMenuAsync(Guid id, double clientX, double clientY)
+    {
+        var option = new ContextMenuOptionModel(
+                            "Add New Entity",
+                            EventCallback.Factory.Create(this, ShowAddEntityModalAsync)
+                            );
+        return _solutionContextMenu.ShowAsync(
+            new()
+            {
+                option
+            },
+            clientX,
+            clientY);
+    }
 }

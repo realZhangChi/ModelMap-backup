@@ -4,7 +4,10 @@
 var canvas;
 
 export function init(id) {
-    canvas = new fabric.Canvas(id);
+    canvas = new fabric.Canvas(id, {
+        fireRightClick: true,  // <-- enable firing of right click events
+        //stopContextMenu: true, // <--  prevent context menu from showing
+    });
     setDimensions();
     new ResizeObserver(setDimensions).observe(document.getElementsByClassName('canvas-container')[0].parentElement);
     //document.getElementsByClassName('canvas-container')[0].parentElement.onresize = function () { setDimensions(); };
@@ -59,6 +62,7 @@ export function init(id) {
     canvas.on('mouse:up', function (opt) {
         // on mouse up we want to recalculate new interaction
         // for all objects, so we call setViewportTransform
+        console.log('canvas on mouseup')
         this.setViewportTransform(this.viewportTransform);
         this.isDragging = false;
         this.selection = true;
@@ -190,6 +194,16 @@ export function addEntity(model) {
         tr: false,
         mtr: false,
     });
+    classComponent.on('mouseup', function (event) {
+        if (event.button === 3) {
+            window.designerInvokeHelper.invokeMethodAsync('ShowCanvasContextMenuAsync', event.currentTarget.model.id, event.e.clientX, event.e.clientY)
+                .then(() => {
+                    console.log('.net invoke sucess!')
+                });
+            console.log('class on mouseup');
+            console.log(event);
+        }
+    })
     canvas.add(classComponent);
 }
 
