@@ -93,7 +93,7 @@
 
     protected override Task OnInitializedAsync()
     {
-        var invokeHelper = new DesignerInvokeHelper(ShowCanvasContextMenuAsync);
+        var invokeHelper = new DesignerInvokeHelper(ShowCanvasContextMenuAsync, UpdateEntityPositionAsync);
         JsRuntime.InvokeVoidAsync("initDesigner", DotNetObjectReference.Create(invokeHelper));
         return base.OnInitializedAsync();
     }
@@ -159,8 +159,16 @@
         {
             var dto = ObjectMapper.Map<EntityComponentModel, UpdateEntityComponentDto>(_entityModel);
             var entity = await EntityComponentAppService.UpdateAsync(_entityModel.Id.Value, dto);
+            await _fabricCanvas.RemoveEntityAsync(entity.Id);
+            await _fabricCanvas.AddEntityAsync(ObjectMapper.Map<EntityComponentDto, EntityComponentModel>(entity));
         }
+    }
 
+    private async Task UpdateEntityPositionAsync(Guid id, double top, double left)
+    {
+        var entity = await EntityComponentAppService.UpdatePositionAsync(id, new PositionDto() { Top = top, Left = left });
+        await _fabricCanvas.AddEntityAsync(ObjectMapper.Map<EntityComponentDto, EntityComponentModel>(entity));
+        await _fabricCanvas.RemoveEntityAsync(entity.Id);
     }
 
     public async Task ShowCanvasContextMenuAsync(Guid id, double clientX, double clientY)

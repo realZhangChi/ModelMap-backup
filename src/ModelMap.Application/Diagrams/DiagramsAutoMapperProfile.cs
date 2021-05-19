@@ -26,7 +26,8 @@ namespace ModelMap
                 .ForMember(des => des.ProjectRelativePath, opt => opt.Ignore())
                 .ForMember(des => des.Directory, opt => opt.Ignore())
                 .ForMember(des => des.BaseClass, opt => opt.Ignore())
-                .ForMember(des => des.BaseInterfaces, opt => opt.Ignore());
+                .ForMember(des => des.BaseInterfaces, opt => opt.Ignore())
+                .ReverseMap();
         }
     }
 }

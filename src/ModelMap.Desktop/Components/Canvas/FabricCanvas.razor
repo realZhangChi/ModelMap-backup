@@ -36,6 +36,12 @@
         await js.InvokeVoidAsync("addEntity", entityModel);
     }
 
+    public async Task RemoveEntityAsync(Guid id)
+    {
+        var js = await _jsTask.Value;
+        await js.InvokeVoidAsync("removeEntity", id);
+    }
+
     public async Task<double> GetCenterXAsync()
     {
         var js = await _jsTask.Value;

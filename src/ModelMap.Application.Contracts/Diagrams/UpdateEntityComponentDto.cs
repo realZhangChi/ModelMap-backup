@@ -10,7 +10,6 @@ namespace ModelMap.Diagrams
         [Required]
         public PositionDto Position { get; set; }
 
-        [Required]
         [MaxLength(DiagramConsts.ClassNameMaxLength)]
         public string Name { get; set; }
 

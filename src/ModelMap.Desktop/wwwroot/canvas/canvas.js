@@ -62,7 +62,6 @@ export function init(id) {
     canvas.on('mouse:up', function (opt) {
         // on mouse up we want to recalculate new interaction
         // for all objects, so we call setViewportTransform
-        console.log('canvas on mouseup')
         this.setViewportTransform(this.viewportTransform);
         this.isDragging = false;
         this.selection = true;
@@ -79,10 +78,18 @@ export function init(id) {
             opt.e.preventDefault();
             opt.e.stopPropagation();
         });
+
+    canvas.on('object:moved', function (event) {
+        if (event.target.get('type') === 'EntityGroup') {
+            window.designerInvokeHelper.invokeMethodAsync('UpdateEntityPositionAsync', event.target.model.id, event.target.top, event.target.left)
+                .then(() => {
+                    console.log('.net invoke sucess!')
+                });
+        }
+    });
 };
 
 export function loadFromJSON(json) {
-    console.log('loadFromJSON');
     canvas.loadFromJSON(json);
     canvas.renderAll();
 }
@@ -92,7 +99,6 @@ export function toJson() {
 }
 
 export function addEntity(model) {
-    console.log(model);
     var nameHeight = 20;
     var itemHeight = 24;
     var partialSpacing = 6;
@@ -196,19 +202,28 @@ export function addEntity(model) {
     });
     classComponent.on('mouseup', function (event) {
         if (event.button === 3) {
-            window.designerInvokeHelper.invokeMethodAsync('ShowCanvasContextMenuAsync', event.currentTarget.model.id, event.e.clientX, event.e.clientY)
+            canvas.setActiveObject(event.target);
+            window.designerInvokeHelper.invokeMethodAsync('ShowCanvasContextMenuAsync', event.target.model.id, event.e.clientX, event.e.clientY)
                 .then(() => {
                     console.log('.net invoke sucess!')
                 });
-            console.log('class on mouseup');
-            console.log(event);
         }
     })
     canvas.add(classComponent);
+    canvas.setActiveObject(classComponent);
+    canvas.renderAll();
 }
 
-export function removeEntity(target) {
-    target.remove();
+export function removeEntity(id) {
+    let entity = canvas.getActiveObject();
+    if (entity &&
+        entity.get('type') === 'EntityGroup' &&
+        entity.get('model').id === id) {
+        canvas.remove(entity);
+    }
+    else {
+
+    }
 }
 
 export function getCenterX() {
@@ -240,7 +255,6 @@ fabric.EntityGroup = fabric.util.createClass(fabric.Group, {
     type: 'EntityGroup',
 
     initialize: function (objects, options) {
-        console.log(options);
         options || (options = {});
 
         this.callSuper('initialize', objects, options);
@@ -255,8 +269,6 @@ fabric.EntityGroup = fabric.util.createClass(fabric.Group, {
     },
 
     _render: function (ctx) {
-        console.log(_render);
-        console.log(ctx);
         this.callSuper('_render', ctx);
     }
 });

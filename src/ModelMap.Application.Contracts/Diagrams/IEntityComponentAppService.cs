@@ -16,6 +16,8 @@ namespace ModelMap.Diagrams
 
         Task<EntityComponentDto> UpdateAsync(Guid id, UpdateEntityComponentDto input);
 
+        Task<EntityComponentDto> UpdatePositionAsync(Guid id, PositionDto input);
+
         Task DeleteAsync(Guid id);
     }
 }

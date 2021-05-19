@@ -70,5 +70,13 @@ namespace ModelMap.Diagrams
             _ = await Repository.UpdateAsync(entity);
             return ObjectMapper.Map<EntityComponent, EntityComponentDto>(entity);
         }
+
+        public async Task<EntityComponentDto> UpdatePositionAsync(Guid id, PositionDto input)
+        {
+            var entity = await Repository.GetAsync(id);
+            _ = entity.SetPosition(input.Top, input.Left);
+            _ = await Repository.UpdateAsync(entity);
+            return ObjectMapper.Map<EntityComponent, EntityComponentDto>(entity);
+        }
     }
 }
