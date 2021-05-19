@@ -1,4 +1,4 @@
-﻿
+﻿@using ModelMap.Source
 <div class="mb-3">
     <label class="form-label">Properties</label>
     <button class="btn btn-sm btn-outline-primary m-3" @onclick="AddProperty"><i class="fa fa-fw fa-plus"></i></button>
@@ -13,51 +13,76 @@
             <div class="col-auto">
                 <div class="row mb-2">
                     <div class="col-auto">
-                        <label for="type-@item.Index" class="visually-hidden">Type</label>
-                        <input type="text"
-                           class="form-control"
-                           id="type-@item.Index"
-                           placeholder="Type"
-                           value="@item.Property.Type"
-                           @onchange="@(p => EntityModel.Properties[item.Index].Type = p.Value?.ToString())" />
+                        <div class="form-floating">
+                            <select class="form-select"
+                                id="access-level-@item.Index"
+                                value="@item.Property.AccessLevel"
+                                @onchange="@(e => OnAccessLevelChanged(item.Index, e))">
+                                @foreach (var level in AccessibilityLevel.Levels)
+                                {
+                                    <option value="@level.Value">@level.Value</option>
+                                }
+                            </select>
+                            <label for="access-level-@item.Index">Access Level</label>
+                        </div>
                     </div>
                     <div class="col-auto">
-                        <label for="name-@item.Index" class="visually-hidden">Name</label>
-                        <input type="text"
-                           class="form-control"
-                           id="name-@item.Index"
-                           placeholder="Name"
-                           value="@item.Property.Name"
-                           @onchange="@(p => EntityModel.Properties[item.Index].Name = p.Value?.ToString())" />
+                        <div class="form-floating">
+                            <select class="form-select"
+                                id="type-@item.Index"
+                                value="@item.Property.Type"
+                                @onchange="@(p => EntityModel.Properties[item.Index].Type = p.Value?.ToString())">
+                                @foreach (var propertyType in EntityPropertyType.Types)
+                                {
+                                    <option value="@propertyType">@propertyType</option>
+                                }
+                            </select>
+                            <label for="type-@item.Index">Type</label>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="form-floating">
+                            <input type="text"
+                               class="form-control"
+                               id="name-@item.Index"
+                               placeholder="Name"
+                               value="@item.Property.Name"
+                               @onchange="@(p => EntityModel.Properties[item.Index].Name = p.Value?.ToString())" />
+                            <label for="name-@item.Index">Name</label>
+                        </div>
                     </div>
                 </div>
 
                 <div class="row mb-2 @item.Property.CollapseStyle">
                     <div class="col-auto">
-                        <label for="access-level-@item.Index" class="visually-hidden">Access Level</label>
-                        <input type="text"
-                           class="form-control"
-                           id="access-level-@item.Index"
-                           placeholder="Access Level"
-                           value="@item.Property.AccessLevel"
-                           @onchange="@(p => EntityModel.Properties[item.Index].AccessLevel = p.Value?.ToString())" />
+                        <div class="form-floating">
+                            <select class="form-select"
+                                id="get-access-level-@item.Index"
+                                value="@item.Property.GetAccessLevel"
+                                disabled="@(!string.IsNullOrWhiteSpace(EntityModel.Properties[item.Index].SetAccessLevel))"
+                                @onchange="@(p => EntityModel.Properties[item.Index].GetAccessLevel = p.Value?.ToString())">
+                                @foreach (var level in AccessibilityLevel.Levels)
+                                {
+                                    <option value="@level.Value" disabled="@IsGetOrSetAccessLevelOptionDisable(item.Index, level.Key)">@level.Value</option>
+                                }
+                            </select>
+                            <label for="get-access-level-@item.Index">Get Access Level</label>
+                        </div>
                     </div>
                     <div class="col-auto">
-                        <label for="get-access-level-@item.Index" class="visually-hidden">Get Access Level</label>
-                        <input type="text"
-                           class="form-control"
-                           id="get-access-level-@item.Index"
-                           placeholder="Get Access Level"
-                           value="@item.Property.GetAccessLevel"
-                           @onchange="@(p => EntityModel.Properties[item.Index].GetAccessLevel = p.Value?.ToString())" />
-                    </div><div class="col-auto">
-                        <label for="set-access-level-@item.Index" class="visually-hidden">Set Access Level</label>
-                        <input type="text"
-                           class="form-control"
-                           id="set-access-level-@item.Index"
-                           placeholder="Set Access Level"
-                           value="@item.Property.SetAccessLevel"
-                           @onchange="@(p => EntityModel.Properties[item.Index].SetAccessLevel = p.Value?.ToString())" />
+                        <div class="form-floating">
+                            <select class="form-select"
+                                id="set-access-level-@item.Index"
+                                value="@item.Property.SetAccessLevel"
+                                disabled="@(!string.IsNullOrWhiteSpace(EntityModel.Properties[item.Index].GetAccessLevel))"
+                                @onchange="@(p => EntityModel.Properties[item.Index].SetAccessLevel = p.Value?.ToString())">
+                                @foreach (var level in AccessibilityLevel.Levels)
+                                {
+                                    <option value="@level.Value" disabled="@IsGetOrSetAccessLevelOptionDisable(item.Index, level.Key)">@level.Value</option>
+                                }
+                            </select>
+                            <label for="set-access-level-@item.Index">Set Access Level</label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -66,12 +91,37 @@
     }
 </div>
 
-@code{
+@code {
     [CascadingParameter]
     public EntityComponentModel EntityModel { get; set; }
 
     private void AddProperty()
     {
         EntityModel.Properties.Add(new PropertyModel());
+    }
+
+    private bool IsGetOrSetAccessLevelOptionDisable(int propertyIndex, int levelKey)
+    {
+        var accessLevel = AccessibilityLevel.Levels.FirstOrDefault(l => l.Value == EntityModel.Properties[propertyIndex].AccessLevel);
+        return levelKey >= accessLevel.Key;
+    }
+
+    private void OnAccessLevelChanged(int propertyIndex, ChangeEventArgs e)
+    {
+        EntityModel.Properties[propertyIndex].AccessLevel = e.Value?.ToString();
+        var accessLevel = AccessibilityLevel.Levels.FirstOrDefault(l => l.Value == EntityModel.Properties[propertyIndex].AccessLevel).Key;
+        var getAccessLevel = AccessibilityLevel.Levels.FirstOrDefault(l => l.Value == EntityModel.Properties[propertyIndex].GetAccessLevel).Key;
+        var setAccessLevel = AccessibilityLevel.Levels.FirstOrDefault(l => l.Value == EntityModel.Properties[propertyIndex].SetAccessLevel).Key;
+        if (getAccessLevel >= accessLevel || setAccessLevel > accessLevel)
+        {
+            ResetGetAndSetAccessorToDefault(propertyIndex);
+        }
+    }
+
+    private void ResetGetAndSetAccessorToDefault(int propertyIndex)
+    {
+        // TODO: Prompt the user with toast
+        EntityModel.Properties[propertyIndex].GetAccessLevel = AccessibilityLevel.Levels[0];
+        EntityModel.Properties[propertyIndex].SetAccessLevel = AccessibilityLevel.Levels[0];
     }
 }
