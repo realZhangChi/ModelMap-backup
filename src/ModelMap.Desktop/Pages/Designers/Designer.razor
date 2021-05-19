@@ -120,6 +120,25 @@
             e.ClientY);
     }
 
+    private async Task ShowCanvasContextMenuAsync(Guid id, double clientX, double clientY)
+    {
+        var entity = await EntityComponentAppService.GetAsync(id);
+        _entityModel = ObjectMapper.Map<EntityComponentDto, EntityComponentModel>(entity);
+        await _canvasContextMenu.ShowAsync(
+            new()
+            {
+                new ContextMenuOptionModel(
+                            "Edit",
+                            EventCallback.Factory.Create(this, ShowEditEntityModalAsync)
+                            ),
+                new ContextMenuOptionModel(
+                            "Delete",
+                            EventCallback.Factory.Create(this, () => DeleteEntityAsync(id))
+                        )
+            },
+        clientX,
+        clientY);
+    }
 
     private async Task ShowAddEntityModalAsync()
     {
@@ -171,20 +190,10 @@
         await _fabricCanvas.RemoveEntityAsync(entity.Id);
     }
 
-    public async Task ShowCanvasContextMenuAsync(Guid id, double clientX, double clientY)
+    private async Task DeleteEntityAsync(Guid id)
     {
-        var entity = await EntityComponentAppService.GetAsync(id);
-        _entityModel = ObjectMapper.Map<EntityComponentDto, EntityComponentModel>(entity);
-        var option = new ContextMenuOptionModel(
-                            "Edit",
-                            EventCallback.Factory.Create(this, ShowEditEntityModalAsync)
-                            );
-        await _canvasContextMenu.ShowAsync(
-            new()
-            {
-                option
-            },
-            clientX,
-            clientY);
+        await EntityComponentAppService.DeleteAsync(id);
+        await _fabricCanvas.RemoveEntityAsync(id);
     }
+
 }
