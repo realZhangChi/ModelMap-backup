@@ -79,6 +79,7 @@
 
         Solution = await SolutionAppService.GetAsync(Guid.Parse(SolutionId));
         SolutionTree = await SolutionService.GetSolutionModelAsync(Solution.AbsolutePath);
+
         await EventBus.PublishAsync(new SolutionChangedEvent()
         {
             SolutionPath = Solution.AbsolutePath
@@ -98,20 +99,26 @@
         return base.OnInitializedAsync();
     }
 
-    private Task ShowContextMenuAsync(MouseEventArgs e)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (e.Button != 2 ||
-            _solutionSidebar.SelectedNodeReference.NodeModel.IsFile)
-        {
-            return Task.CompletedTask;
-        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
 
+    private async Task ShowContextMenuAsync(MouseEventArgs e)
+    {
         var selectedNode = _solutionSidebar.SelectedNodeReference;
+        if (e.Button != 2 ||
+            selectedNode.NodeModel.IsFile)
+        {
+            return;
+        }
+        var isInProject = !(await SolutionService.GetPathRelativeToProjectAsync(selectedNode.NodeModel.Path) is null);
+
         var option = new ContextMenuOptionModel(
                             "Add New Entity",
-                            EventCallback.Factory.Create(this, ShowAddEntityModalAsync)
-                            );
-        return _solutionContextMenu.ShowAsync(
+                            EventCallback.Factory.Create(this, ShowAddEntityModalAsync),
+                            isInProject);
+        await _solutionContextMenu.ShowAsync(
             new()
             {
                 option
@@ -151,7 +158,7 @@
             Top = await _fabricCanvas.GetCenterYAsync(),
             Left = await _fabricCanvas.GetCenterXAsync()
         };
-        _entityModel.ProjectRelativePath = await SolutionService.GetProjectRelativePathAsync(filePath);
+        _entityModel.ProjectRelativePath = await SolutionService.GetPathRelativeToProjectAsync(filePath);
         await _entityModal.ShowAsync();
     }
 

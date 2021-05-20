@@ -4,6 +4,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace ModelMap.Desktop.Services.Solution
 {
+    // TODO: use OmniSharp to handle the solution
     public class CurrentSolution : ICurrentSolution, ISingletonDependency
     {
         private MSBuildWorkspace _workspace;

@@ -51,12 +51,17 @@ namespace ModelMap.Desktop.Services.Solution
             });
         }
 
-        public Task<string> GetProjectRelativePathAsync([NotNull] string path)
+        [CanBeNull]
+        public Task<string> GetPathRelativeToProjectAsync([NotNull] string path)
         {
             return Task.Run(() =>
             {
                 var project = _currentSolution.Value.Projects
                     .Where(p => path.StartsWith(Path.GetDirectoryName(p.FilePath))).SingleOrDefault();
+                if (project is null)
+                {
+                    return null;
+                }
                 return Path.GetRelativePath(Path.GetDirectoryName(_currentSolution.Value.FilePath), project.FilePath);
             });
         }
