@@ -1,0 +1,102 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<!-- MacCatalyst -->
+		<TargetFrameworks>net6.0-maccatalyst</TargetFrameworks>
+		<OutputType>Exe</OutputType>
+		<SingleProject>true</SingleProject>
+		<RootNamespace>ModelMap.Desktop</RootNamespace>
+
+		<!-- Display name -->
+		<ApplicationTitle>ModelMap.Desktop</ApplicationTitle>
+
+		<!-- App Identifier -->
+		<ApplicationId>com.companyname.ModelMap.Desktop</ApplicationId>
+
+		<!-- Versions -->
+		<ApplicationVersion>1.0</ApplicationVersion>
+		<AndroidVersionCode>1</AndroidVersionCode>
+
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- App Icon -->
+		<MauiImage Include="Resources\appicon.svg" ForegroundFile="Resources\appiconfg.svg" IsAppIcon="true" />
+
+		<!-- Splash Screen -->
+		<MauiSplashScreen Include="Resources\appiconfg.svg" Color="#512BD4" />
+
+		<!-- Images -->
+		<MauiImage Include="Resources\Images\*" />
+
+		<!-- Custom Fonts -->
+		<MauiFont Include="Resources\Fonts\*" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="EventHandlers\**" />
+	  <Compile Remove="Events\**" />
+	  <Content Remove="EventHandlers\**" />
+	  <Content Remove="Events\**" />
+	  <EmbeddedResource Remove="EventHandlers\**" />
+	  <EmbeddedResource Remove="Events\**" />
+	  <None Remove="EventHandlers\**" />
+	  <None Remove="Events\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="IdentityModel" Version="5.1.0" />
+		<PackageReference Include="IdentityModel.OidcClient" Version="4.0.0" />
+		<PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="6.0.100-preview.4.*" />
+		<PackageReference Include="Microsoft.Build.Locator" Version="1.4.1" />
+		<PackageReference Include="Microsoft.CodeAnalysis" Version="3.9.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.9.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="3.9.0" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.0-preview.4.*" />
+		<PackageReference Include="Microsoft.Maui" Version="6.0.100-preview.4.*" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Components" Version="4.3.1" />
+		<PackageReference Include="Volo.Abp.Autofac" Version="4.3.1" />
+		<PackageReference Include="Volo.Abp.AutoMapper" Version="4.3.1" />
+		<PackageReference Include="Volo.Abp.EventBus" Version="4.3.1" />
+		<PackageReference Include="Volo.Abp.Http.Client.IdentityModel" Version="4.3.1" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<InvariantGlobalization Condition="'$(TargetFramework)' == 'net6.0-maccatalyst'">true</InvariantGlobalization>
+		<RuntimeIdentifier Condition="'$(TargetFramework)' == 'net6.0-maccatalyst'">maccatalyst-x64</RuntimeIdentifier>
+	</PropertyGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\..\ModelMap.HttpApi.Client\ModelMap.HttpApi.Client.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <RazorComponent Remove="EventHandlers\**" />
+	</ItemGroup>
+	<ItemGroup>
+	  <RazorComponent Remove="Events\**" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Include="wwwroot\canvas\canvas.js" />
+	  <None Include="wwwroot\contextMenu.js" />
+	  <None Include="wwwroot\designer.js" />
+	  <None Include="wwwroot\index.js" />
+	  <None Include="wwwroot\lib\bootstrap\bootstrap.bundle.min.js" />
+	  <None Include="wwwroot\lib\fabric\fabric.min.js" />
+	  <None Include="wwwroot\lib\fontawesome\webfonts\fa-brands-400.svg" />
+	  <None Include="wwwroot\lib\fontawesome\webfonts\fa-brands-400.woff2" />
+	  <None Include="wwwroot\lib\fontawesome\webfonts\fa-regular-400.svg" />
+	  <None Include="wwwroot\lib\fontawesome\webfonts\fa-regular-400.woff2" />
+	  <None Include="wwwroot\lib\fontawesome\webfonts\fa-solid-900.svg" />
+	  <None Include="wwwroot\lib\fontawesome\webfonts\fa-solid-900.woff2" />
+	  <None Include="wwwroot\lib\jquery\jquery-3.5.1.slim.min.js" />
+	  <None Include="wwwroot\main.js" />
+	  <None Include="wwwroot\modal.js" />
+	  <None Include="wwwroot\solutionTree.js" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Update="appsettings.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
+</Project>

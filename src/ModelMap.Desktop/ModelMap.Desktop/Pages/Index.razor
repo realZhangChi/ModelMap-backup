@@ -1,0 +1,24 @@
+﻿@page "/"
+@using ModelMap.Desktop.Services.File
+@using ModelMap.Desktop.Services.OmniSharp
+
+<div class="container mt-5">
+    <div class="p-5">
+
+        <h1>Welcome! </h1>
+
+        <div class="mt-3">
+            <button class="btn btn-primary" @onclick="OnOpenSolutionClickedAsync">
+                <i class="fa fa-folder-open"></i> Open
+            </button>
+        </div>
+
+        <div class="mt-5">
+            <h6>recent:</h6>
+            <div class="list-group list-group-flush mt-2">
+                
+            </div>
+        </div>
+    </div>
+</div>
+

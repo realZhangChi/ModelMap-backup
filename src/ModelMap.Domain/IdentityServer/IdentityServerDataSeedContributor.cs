@@ -171,7 +171,7 @@ namespace ModelMap.IdentityServer
                 await CreateClientAsync(
                     name: desktopClientId,
                     scopes: commonScopes,
-                    grantTypes: new[] { "authorization_code" },
+                    grantTypes: new[] { "hybrid", "client_credentials" },
                     secret: configurationSection["ModelMap_Desktop:ClientSecret"]?.Sha256(),
                     requireClientSecret: false,
                     redirectUri: $"{desktopRootUrl}/authentication/login-callback",
